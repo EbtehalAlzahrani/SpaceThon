@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CosmoDive - رحلة الضوء عبر الفضاء</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        /* خلفية النجوم */
+        body {
+            background: radial-gradient(ellipse at bottom, #0d1b2a 0%, #000000 100%);
+            color: white;
+            overflow-x: hidden;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .stars {
+            width: 100%;
+            height: 100%;
+            background: transparent url("https://www.transparenttextures.com/patterns/stardust.png") repeat;
+            position: absolute;
+            top: 0;
+            left: 0;
+            animation: moveStars 200s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes moveStars {
+            from {
+                background-position: 0 0;
+            }
+
+            to {
+                background-position: -10000px 5000px;
+            }
+        }
+
+        /* لون التدرج للأزرار والعناوين */
+        .gradient-text {
+            background: linear-gradient(90deg, #e38a23, #8b1c85);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .gradient-btn {
+            background: #f5b619;
+        }
+    </style>
+</head>
+
+<body class="relative flex flex-col items-center justify-center min-h-screen px-6 text-center">
+
+    <!-- خلفية النجوم -->
+    <div class="stars"></div>
+
+    <!-- المحتوى الرئيسي -->
+    <main class="z-10">
+        <!-- أيقونة الصاروخ -->
+        <div class="flex justify-center">
+            <img src="images/rocket.png" alt="Rocket Icon" class="w-40 h-40" />
+        </div>
+
+        <!-- العنوان -->
+        <h1 class="text-6xl font-extrabold mb-4 tracking-wider gradient-text">CosmoDive</h1>
+
+        <!-- الوصف -->
+        <p class="text-gray-300 text-lg mb-6">
+            رحلة الضوء عبر الفضاء
+        </p>
+
+        <p class="text-gray-400 max-w-2xl mx-auto leading-relaxed mb-10">
+            انطلق في رحلة تعليمية فريدة عبر الفضاء، حيث تسافر كشعاع ضوء من الشمس.
+            كل تمرير يقطع زمناً ضوئياً، اكتشف الكواكب والأجرام السماوية في مواقعها الزمنية الحقيقية.
+        </p>
+
+        <!-- الأزرار -->
+        <div class="flex flex-wrap justify-center gap-4">
+            <button class="gradient-btn text-black font-semibold py-2 px-6 rounded-md hover:opacity-90 transition">
+                ابدأ الرحلة
+            </button>
+            <button
+                class="border border-gray-600 text-white font-semibold py-2 px-6 rounded-md hover:bg-gray-700 transition">
+                تعلم المزيد
+            </button>
+        </div>
+
+        <!-- 🤖 أيقونة الشات بوت الثابتة -->
+        <div class="fixed bottom-24 right-6 z-50">
+            <button
+                class="hover:scale-110 transition-transform duration-300">
+                <img src="images/chatbot.png" alt="Chatbot Icon" class="w-20 h-20" />
+            </button>
+        </div>
+
+
+        <!-- ✅ شريط المعلومات السفلي الثابت -->
+        <footer
+            class="fixed bottom-0 pt-5 pb-5 left-0 w-full bg-black/40 backdrop-blur-md border-t border-gray-700 text-gray-300 text-sm">
+            <div class="max-w-5xl mx-auto flex flex-wrap justify-between items-center px-6 py-3">
+
+                <div class="flex items-center gap-2">
+                    <span class="text-yellow-400">⏱</span>
+                    <span>الزمن الضوئي المقطوع: ٠ ثانية</span>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <span>الموقع الحالي: </span>
+                    <span>الشمس</span>                
+                </div>
+
+            </div>
+        </footer>
+
+    </main>
+</body>
+
+</html>
