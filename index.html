@@ -63,6 +63,38 @@
 
     <div class="stars"></div>
 
+    <!-- NEW NAVBAR SECTION -->
+    <nav class="fixed top-0 z-50 w-full bg-black/80 backdrop-blur-md border-b border-gray-700">
+        <div class="max-w-7xl mx-auto flex justify-between items-center h-16 px-6">
+
+            <!-- Burger Menu Button (Left/Start in RTL) -->
+            <button id="menu-button" class="text-white p-2 rounded-full hover:bg-gray-700 transition">
+                <!-- Hamburger Icon SVG -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+
+            <!-- Logo and Score (Right/End in RTL) -->
+            <div class="flex items-center space-x-4 space-x-reverse">
+
+                <!-- Score Indicator: Rounded corners, white line (border) -->
+                <div
+                    class="flex items-center border border-yellow-500 text-white text-sm font-semibold rounded-md py-1 px-3">
+                    <span class="ml-2">نقاطك:</span>
+                    <span class="text-yellow-400">0</span>
+                    <span class="mr-1">⭐</span>
+                </div>
+
+                <!-- CosmoDive Title -->
+                <h2 class="text-2xl font-extrabold text-white">CosmoDive</h2>
+            </div>
+        </div>
+    </nav>
+
     <!-- the header -->
     <main class="z-10 max-w-4xl w-full px-6 py-20 min-h-screen flex flex-col justify-center">
         <div class="flex justify-center">
@@ -105,7 +137,7 @@
 
             <!-- 📋 Planet Info -->
             <div
-                class="bg-gray-900/70 backdrop-blur-md rounded-xl p-8 w-full lg:w-2/5 border border-gray-700 shadow-2xl text-right">
+                class="bg-gray-900/70 backdrop-blur-md rounded-xl p-8 lg:w-3/5 border border-gray-700 shadow-2xl text-right">
 
                 <!-- Time Light (Top right badge) -->
                 <div
@@ -152,13 +184,6 @@
                 <button
                     class="w-full border border-yellow-500 text-yellow-500 font-semibold py-3 px-6 rounded-lg hover:bg-yellow-500 hover:text-black transition">
                     <span class="ml-2">عرض المزيد من التفاصيل</span>
-                    <span class="inline-block transform rotate-180">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                            viewBox="0 0 16 16">
-                            <path fill-rule="evenodd"
-                                d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" />
-                        </svg>
-                    </span>
                 </button>
             </div>
         </div>
@@ -236,7 +261,11 @@
             مما يمكننا تخيله!
         </p>
 
-        <div class="flex flex-wrap justify-center gap-6 mb-16">
+        <p class="text-gray-400 max-w-2xl mx-auto leading-relaxed mb-12 text-lg">
+            استعد لاستكشاف أعماق الفضاء المجهول!
+        </p>
+
+        <!-- <div class="flex flex-wrap justify-center gap-6 mb-16">
             <div
                 class="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-lg p-6 w-full sm:w-64 flex flex-col justify-between items-center text-center hover:scale-105 transition-transform duration-300 cursor-pointer">
                 <h3 class="font-bold text-xl mb-2 text-white">النجوم البعيدة</h3>
@@ -254,7 +283,7 @@
                 <h3 class="font-bold text-xl mb-2 text-white">حزام كايبر</h3>
                 <p class="text-gray-400 text-sm">منطقة الكويكبات الجليدية</p>
             </div>
-        </div>
+        </div> -->
 
         <button class="gradient-btn text-white font-semibold py-2 px-7 rounded-md text-lg hover:opacity-90 transition">
             ابدأ رحلة جديدة!
@@ -262,8 +291,8 @@
     </section>
 
     <!-- the footer -->
-    <footer class="static w-full bg-black/80 border-t border-gray-800 text-gray-400 py-16 z-10">
-        <div class="max-w-7xl mx-auto px-6 text-right pb-8">
+    <footer class="static w-full bg-black/80 border-t border-gray-800 text-gray-400 py-8 z-10">
+        <div class="max-w-7xl mx-auto px-6 text-right pb-16">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-10 md:gap-8">
 
                 <div class="md:col-span-1">
@@ -307,38 +336,66 @@
     <!-- the status bar at the bottom of the page -->
     <div
         class="fixed bottom-0 left-0 w-full bg-black/80 backdrop-blur-sm border-t border-gray-700 text-gray-300 text-sm h-20 z-40">
-        <div class="max-w-full mx-auto flex h-full">
+        <div class="max-w-full mx-auto flex h-full justify-between">
 
-            <!-- <div class="flex items-center justify-center w-20 bg-orange-500/90 h-full border-l border-black/30">
-                <img src="images/rocket-small.png" alt="Icon" class="w-10 h-10">
-            </div> -->
-
+            <!-- الزمن الضوئي (يمين) -->
             <div class="flex items-center justify-center px-6 bg-black/30 h-full border-r border-black/30">
                 <div class="text-lg font-bold">
                     <span class="text-gray-400">الزمن الضوئي المقطوع:</span>
-                    <span class="gradient-text">4 ساعة 5 دقيقة</span>
+                    <span id="lightTime" class="gradient-text">—</span>
                 </div>
             </div>
 
-            <div class="flex-grow flex items-center justify-start text-white text-base">
-                <div class="px-6 flex items-center gap-2 text-center border-l border-black/30 h-full">
-                    <span class="text-gray-400">الموقع الحالي:</span>
-                    <span class="font-bold text-white">أورانوس</span>
-                </div>
-                <div class="px-6 flex items-center gap-4 border-l border-black/30 h-full">
-                    <span class="text-gray-400">المسافة:</span>
-                    <span class="font-bold text-white">2.9 مليار كم</span>
-                </div>
-                <div class="px-6 flex items-center gap-4 border-l border-black/30 h-full">
-                    <button
-                        class="flex items-center gap-2 hover:text-yellow-400 transition py-2 px-4 rounded-full bg-white/10">
-                        <span class="font-bold">التفاصيل</span>
-                    </button>
-                </div>
+            <!-- الموقع الحالي (يسار) -->
+            <div class="flex items-center px-6 text-white text-base">
+                <span class="text-gray-400">الموقع الحالي:</span>
+                <span id="currentLocation" class="font-bold text-white ml-2">أورانوس</span>
             </div>
 
         </div>
     </div>
+
+    <script>
+        /*
+        مثال بسيط لتحويل زمن (ساعات + دقائق) إلى سنوات (سنة ضوئية تعبر عن وحدة الزمن هنا)
+        ملاحظة: السنة المستخدمة هنا هي السنة الجوليانية التقريبية (~31557600 ثانية).
+        - عدّل القيم hours و minutes بحسب ما تود عرضه.
+        - أو استخدم الدالة updateLightTime(hour, minute) لتحديث ديناميكي.
+        */
+        (function () {
+            const yearSeconds = 31557600; // ثانية في السنة التقريبية
+
+            // مثال ثابت — عدّل هذه القيم أو اجعلها ديناميكية
+            let hours = 4;
+            let minutes = 5;
+
+            function toLightYears(h, m) {
+                const seconds = (h * 3600) + (m * 60);
+                const years = seconds / yearSeconds;
+                // إذا كانت القيمة أقل من 1 سنة أعرض 6 منازل عشرية، وإلا 3 منازل
+                return years < 1 ? years.toFixed(6) : years.toFixed(3);
+            }
+
+            function updateLightTime(h, m) {
+                const el = document.getElementById('lightTime');
+                if (!el) return;
+                el.textContent = `${toLightYears(h, m)} سنة ضوئية`;
+            }
+
+            // تشغيل المرة الأولى بالقيم الافتراضية
+            updateLightTime(hours, minutes);
+
+            // --- مثال لاستخدام ديناميكي:
+            // إذا أردت تحديث القيمة لاحقًا:
+            // updateLightTime(10, 30);
+
+            // --- مثال: لو كان لديك زمن مخزن في data-attributes:
+            // const container = document.querySelector('.fixed');
+            // if (container && container.dataset.hours) {
+            //   updateLightTime(+container.dataset.hours, +container.dataset.minutes || 0);
+            // }
+        })();
+    </script>
 
 </body>
 
