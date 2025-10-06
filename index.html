@@ -1,402 +1,952 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CosmoDive - رحلة الضوء عبر الفضاء</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
     <style>
-        /* If you haven't externalized your CSS yet, keep it here.
-           Otherwise, this <style> block can be removed if all custom CSS is in style.css. */
+      body {
+        background: radial-gradient(
+          ellipse at bottom,
+          #0d1b2a 0%,
+          #000000 100%
+        );
+        color: white;
+        overflow-x: hidden;
+        font-family: "Cairo", sans-serif;
+        scroll-behavior: smooth;
+      }
 
-        body {
-            background: radial-gradient(ellipse at bottom, #0d1b2a 0%, #000000 100%);
-            color: white;
-            overflow-x: hidden;
-            font-family: 'Cairo', sans-serif;
+      .stars {
+        width: 100%;
+        height: 100%;
+        background: transparent
+          url("https://www.transparenttextures.com/patterns/stardust.png")
+          repeat;
+        position: fixed;
+        top: 0;
+        left: 0;
+        animation: moveStars 200s linear infinite;
+        z-index: 0;
+      }
+
+      @keyframes moveStars {
+        from {
+          background-position: 0 0;
         }
 
-        .stars {
-            width: 100%;
-            height: 100%;
-            background: transparent url("https://www.transparenttextures.com/patterns/stardust.png") repeat;
-            position: fixed;
-            /* Changed from absolute to fixed for better scrolling */
-            top: 0;
-            left: 0;
-            animation: moveStars 200s linear infinite;
-            z-index: 0;
+        to {
+          background-position: -10000px 5000px;
         }
+      }
 
-        @keyframes moveStars {
-            from {
-                background-position: 0 0;
-            }
+      .gradient-text {
+        background: linear-gradient(90deg, #e38a23, #8b1c85);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
 
-            to {
-                background-position: -10000px 5000px;
-            }
+      .gradient-btn {
+        background: linear-gradient(90deg, #e38a23, #8b1c85);
+      }
+
+      .gradient-btn:hover {
+        opacity: 0.9;
+      }
+
+      .planet-visual {
+        cursor: pointer;
+        transition: transform 0.3s ease;
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+          box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
         }
-
-        .gradient-text {
-            background: linear-gradient(90deg, #e38a23, #8b1c85);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
+        50% {
+          transform: scale(1.05);
+          box-shadow: 0 0 40px rgba(255, 255, 255, 0.6);
         }
-
-        .gradient-btn {
-            background: linear-gradient(90deg, #e38a23, #8b1c85);
-            /* Cohesive gradient */
+        100% {
+          transform: scale(1);
+          box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
         }
+      }
 
-        .gradient-btn:hover {
-            opacity: 0.9;
-        }
+      .planet-visual:hover {
+        animation: none;
+        transform: scale(1.1);
+      }
+
+      .hidden-section {
+        display: none;
+      }
+
+      .planet-section {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transform: translateY(50px);
+        transition: opacity 0.8s ease, transform 0.8s ease;
+        scroll-margin-top: 5rem;
+      }
+
+      .planet-section.active {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* Popup Styles */
+      .popup-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+      }
+
+      .popup-overlay.active {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .popup-content {
+        background: #1a202c;
+        border-radius: 12px;
+        padding: 2rem;
+        max-width: 90%;
+        width: 500px;
+        max-height: 90vh;
+        overflow-y: auto;
+        transform: scale(0.8);
+        transition: transform 0.3s ease;
+        border: 1px solid #4a5568;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      }
+
+      .popup-overlay.active .popup-content {
+        transform: scale(1);
+      }
+
+      .confetti-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 101;
+      }
     </style>
-</head>
+  </head>
 
-<body class="relative flex flex-col items-center justify-center min-h-screen px-6 text-center">
-
+  <body
+    class="relative flex flex-col items-center justify-center min-h-screen px-6"
+  >
     <div class="stars"></div>
 
-    <!-- NEW NAVBAR SECTION -->
-    <nav class="fixed top-0 z-50 w-full bg-black/80 backdrop-blur-md border-b border-gray-700">
-        <div class="max-w-7xl mx-auto flex justify-between items-center h-16 px-6">
+    <!-- NAVBAR SECTION -->
+    <nav
+      class="fixed top-0 z-50 w-full bg-black/80 backdrop-blur-md border-b border-gray-700"
+    >
+      <div
+        class="max-w-7xl mx-auto flex justify-between items-center h-16 px-6"
+      >
+        <!-- Burger Menu Button -->
+        <button
+          id="menu-button"
+          class="text-white p-2 rounded-full hover:bg-gray-700 transition"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
 
-            <!-- Burger Menu Button (Left/Start in RTL) -->
-            <button id="menu-button" class="text-white p-2 rounded-full hover:bg-gray-700 transition">
-                <!-- Hamburger Icon SVG -->
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="3" y1="12" x2="21" y2="12"></line>
-                    <line x1="3" y1="6" x2="21" y2="6"></line>
-                    <line x1="3" y1="18" x2="21" y2="18"></line>
-                </svg>
-            </button>
+        <!-- Logo and Score -->
+        <div class="flex items-center space-x-4 space-x-reverse">
+          <div
+            class="flex items-center border border-yellow-500 text-white text-sm font-semibold rounded-md py-1 px-3"
+          >
+            <span class="ml-2">نقاطك:</span>
+            <span id="score-value" class="text-yellow-400">0</span>
+            <span class="mr-1">⭐</span>
+          </div>
 
-            <!-- Logo and Score (Right/End in RTL) -->
-            <div class="flex items-center space-x-4 space-x-reverse">
-
-                <!-- Score Indicator: Rounded corners, white line (border) -->
-                <div
-                    class="flex items-center border border-yellow-500 text-white text-sm font-semibold rounded-md py-1 px-3">
-                    <span class="ml-2">نقاطك:</span>
-                    <span class="text-yellow-400">0</span>
-                    <span class="mr-1">⭐</span>
-                </div>
-
-                <!-- CosmoDive Title -->
-                <h2 class="text-2xl font-extrabold text-white">CosmoDive</h2>
-            </div>
+          <h2 class="text-2xl font-extrabold text-white">CosmoDive</h2>
         </div>
+      </div>
     </nav>
 
     <!-- the header -->
-    <main class="z-10 max-w-4xl w-full px-6 py-20 min-h-screen flex flex-col justify-center">
-        <div class="flex justify-center">
-            <img src="images/rocket.png" alt="Rocket Icon" class="w-40 h-40" />
-        </div>
+    <main
+      class="z-10 max-w-4xl w-full px-6 py-20 min-h-screen flex flex-col justify-center"
+    >
+      <div class="flex justify-center">
+        <img src="images/rocket.png" alt="Rocket Icon" class="w-40 h-40" />
+      </div>
 
-        <h1 class="text-7xl md:text-8xl font-extrabold mb-4 tracking-wider gradient-text">CosmoDive</h1>
+      <h1
+        class="text-7xl md:text-8xl font-extrabold mb-4 tracking-wider gradient-text"
+      >
+        CosmoDive
+      </h1>
 
-        <p class="text-gray-300 text-lg mb-6">
-            رحلة الضوء عبر الفضاء
-        </p>
+      <p class="text-gray-300 text-lg mb-6">رحلة الضوء عبر الفضاء</p>
 
-        <p class="text-gray-400 max-w-2xl mx-auto leading-relaxed mb-10">
-            انطلق في رحلة تعليمية فريدة عبر الفضاء، حيث تسافر كشعاع ضوء من الشمس.
-            كل تمرير يقطع زمناً ضوئياً، اكتشف الكواكب والأجرام السماوية في مواقعها الزمنية الحقيقية.
-        </p>
+      <p class="text-gray-400 max-w-2xl mx-auto leading-relaxed mb-10">
+        انطلق في رحلة تعليمية فريدة عبر الفضاء، حيث تسافر كشعاع ضوء من الشمس. كل
+        تمرير يقطع زمناً ضوئياً، اكتشف الكواكب والأجرام السماوية في مواقعها
+        الزمنية الحقيقية.
+      </p>
 
-        <div class="flex flex-wrap justify-center gap-4">
-            <button class="gradient-btn text-white font-semibold py-2 px-6 rounded-md transition">
-                ابدأ الرحلة
-            </button>
-            <button
-                class="border border-gray-600 text-white font-semibold py-2 px-6 rounded-md hover:bg-gray-700 transition focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 focus:ring-offset-black">
-                تعلم المزيد
-            </button>
-        </div>
+      <div class="flex flex-wrap justify-center gap-4">
+        <button
+          id="start-journey-btn"
+          class="gradient-btn text-white font-semibold py-2 px-6 rounded-md transition"
+        >
+          ابدأ الرحلة
+        </button>
+        <button
+          class="border border-gray-600 text-white font-semibold py-2 px-6 rounded-md hover:bg-gray-700 transition focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 focus:ring-offset-black"
+        >
+          تعلم المزيد
+        </button>
+      </div>
     </main>
 
-    <!-- the Planet -->
-    <section id="planet-details" class="w-full min-h-screen flex items-center justify-center px-4 py-20">
-        <div class="max-w-6xl w-full flex flex-col lg:flex-row-reverse items-center justify-between gap-10">
-
-            <!-- 🪐 Planet Visual -->
-            <div class="relative w-full lg:w-3/5 h-[400px] lg:h-[600px] flex items-center justify-center">
-                <div
-                    class="planet-visual w-[350px] h-[350px] rounded-full bg-yellow-500 shadow-[0_0_40px_15px_rgba(255,200,150,0.3)]">
-                </div>
-
-            </div>
-
-            <!-- 📋 Planet Info -->
-            <div
-                class="bg-gray-900/70 backdrop-blur-md rounded-xl p-8 lg:w-3/5 border border-gray-700 shadow-2xl text-right">
-
-                <!-- Time Light (Top right badge) -->
-                <div
-                    class="bg-purple-900/50 text-purple-300 text-xs font-semibold px-3 py-1 rounded-full inline-block mb-6">
-                    الزمن الضوئي: ٥ دقيقة
-                </div>
-
-                <!-- Planet Title -->
-                <h2 class="text-5xl font-extrabold text-white mb-2">الزهرة</h2>
-                <p class="text-2xl text-white/50 mb-8">Venus</p>
-
-                <!-- Main Fact -->
-                <p class="text-yellow-400 text-lg font-semibold mb-8 border-r-4 border-yellow-400 pr-3">
-                    أسخن كوكب في النظام الشمسي
-                </p>
-
-                <!-- Stats Grid -->
-                <div class="grid grid-cols-2 gap-6 mb-10">
-                    <div class="text-right">
-                        <p class="text-sm text-gray-400">القطر</p>
-                        <p class="text-xl font-bold text-white">١٢,١٠٤ كم</p>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-sm text-gray-400">المسافة من الشمس</p>
-                        <p class="text-xl font-bold text-white">١٠٨.٢ مليون كم</p>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-sm text-gray-400">اليوم</p>
-                        <p class="text-xl font-bold text-white">٢٤٣ يوم أرضي</p>
-                    </div>
-                    <div class="text-right">
-                        <p class="text-sm text-gray-400">السنة</p>
-                        <p class="text-xl font-bold text-white">٢٢٥ يوم أرضي</p>
-                    </div>
-                </div>
-
-                <!-- Highlighted Fact Button -->
-                <button
-                    class="w-full bg-purple-700/50 text-purple-300 font-semibold py-3 px-6 rounded-lg mb-4 hover:bg-purple-600/70 transition">
-                    حقيقة علمية: يدور في الاتجاه المعاكس
-                </button>
-
-                <!-- Details Button -->
-                <button
-                    class="w-full border border-yellow-500 text-yellow-500 font-semibold py-3 px-6 rounded-lg hover:bg-yellow-500 hover:text-black transition">
-                    <span class="ml-2">عرض المزيد من التفاصيل</span>
-                </button>
-            </div>
-        </div>
-    </section>
-
-    <!-- QUIZ SECTION: Check Your Knowledge -->
-    <section id="quiz-section" class="w-full py-20 flex items-center justify-center px-4">
+    <!-- Planet Sections -->
+    <div id="planets-container" class="w-full">
+      <!-- Venus Section -->
+      <section id="venus-section" class="planet-section">
         <div
-            class="max-w-xl w-full text-right bg-gray-900/70 backdrop-blur-md rounded-xl p-8 border border-gray-700 shadow-2xl">
+          class="max-w-6xl w-full flex flex-col lg:flex-row-reverse items-center justify-between gap-10"
+        >
+          <!-- 🪐 Planet Visual -->
+          <div
+            class="relative w-full lg:w-3/5 h-[400px] lg:h-[600px] flex items-center justify-center"
+          >
+            <div
+              id="venus-visual"
+              class="planet-visual w-[350px] h-[350px] rounded-full bg-yellow-500 shadow-[0_0_40px_15px_rgba(255,200,150,0.3)]"
+            ></div>
+          </div>
 
-            <!-- Quiz Header -->
-            <h3 class="text-3xl font-extrabold text-white mb-8 flex items-center justify-end gap-3 flex-row-reverse">
-                <!-- Help Circle Icon -->
-                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="text-yellow-400">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
-                    <path d="M12 17h.01"></path>
-                </svg>
-                اختبر معلوماتك
-            </h3>
+          <!-- 📋 Planet Info -->
+          <div
+            class="bg-gray-900/70 backdrop-blur-md rounded-xl p-8 lg:w-3/5 border border-gray-700 shadow-2xl text-right"
+          >
+            <!-- Time Light -->
+            <div
+              class="bg-purple-900/50 text-purple-300 text-xs font-semibold px-3 py-1 rounded-full inline-block mb-6"
+            >
+              الزمن الضوئي: ٥ دقيقة
+            </div>
 
+            <!-- Planet Title -->
+            <h2 class="text-5xl font-extrabold text-white mb-2">الزهرة</h2>
+            <p class="text-2xl text-white/50 mb-8">Venus</p>
 
-            <!-- Question -->
-            <p class="text-xl text-gray-300 font-medium mb-10 border-r-4 border-purple-500 pr-3">
-                لماذا نُسمّي المريخ بالكوكب الأحمر؟
+            <!-- Main Fact -->
+            <p
+              class="text-yellow-400 text-lg font-semibold mb-8 border-r-4 border-yellow-400 pr-3"
+            >
+              أسخن كوكب في النظام الشمسي
             </p>
 
-            <!-- Options -->
-            <div class="space-y-4">
-                <!-- Option 1: (Correct Answer Placeholder) -->
-                <button
-                    class="w-full text-right bg-gray-800/80 border border-transparent text-white py-4 px-6 rounded-lg font-semibold hover:bg-purple-700/60 transition duration-300 shadow-md">
-                    أ. بسبب أكسيد الحديد (الصدأ)
-                </button>
-                <!-- Option 2 -->
-                <button
-                    class="w-full text-right bg-gray-800/80 border border-transparent text-white py-4 px-6 rounded-lg font-semibold hover:bg-purple-700/60 transition duration-300 shadow-md">
-                    ب. لسبب درجة الحرارة العالية
-                </button>
-                <!-- Option 3 -->
-                <button
-                    class="w-full text-right bg-gray-800/80 border border-transparent text-white py-4 px-6 rounded-lg font-semibold hover:bg-purple-700/60 transition duration-300 shadow-md">
-                    ج. لسبب الغلاف الجوي
-                </button>
-                <!-- Option 4 -->
-                <button
-                    class="w-full text-right bg-gray-800/80 border border-transparent text-white py-4 px-6 rounded-lg font-semibold hover:bg-purple-700/60 transition duration-300 shadow-md">
-                    د. بسبب البراكين
-                </button>
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-2 gap-6 mb-10">
+              <div class="text-right">
+                <p class="text-sm text-gray-400">القطر</p>
+                <p class="text-xl font-bold text-white">١٢,١٠٤ كم</p>
+              </div>
+              <div class="text-right">
+                <p class="text-sm text-gray-400">المسافة من الشمس</p>
+                <p class="text-xl font-bold text-white">١٠٨.٢ مليون كم</p>
+              </div>
+              <div class="text-right">
+                <p class="text-sm text-gray-400">اليوم</p>
+                <p class="text-xl font-bold text-white">٢٤٣ يوم أرضي</p>
+              </div>
+              <div class="text-right">
+                <p class="text-sm text-gray-400">السنة</p>
+                <p class="text-xl font-bold text-white">٢٢٥ يوم أرضي</p>
+              </div>
             </div>
 
-            <!-- Continue Button -->
-            <div class="mt-8">
-                <button class="gradient-btn text-white font-semibold py-3 px-6 rounded-md transition w-full">
-                    التالي
-                </button>
+            <!-- Highlighted Fact Button -->
+            <button
+              class="w-full bg-purple-700/50 text-purple-300 font-semibold py-3 px-6 rounded-lg mb-4 hover:bg-purple-600/70 transition"
+            >
+              حقيقة علمية: يدور في الاتجاه المعاكس
+            </button>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col gap-4">
+              <button
+                data-planet="venus"
+                class="quiz-btn w-full border border-yellow-500 text-yellow-500 font-semibold py-3 px-6 rounded-lg hover:bg-yellow-500 hover:text-black transition"
+              >
+                اختبر معلوماتك
+              </button>
+              <button
+                onclick="scrollToPlanet('saturn-section')"
+                class="w-full gradient-btn text-white font-semibold py-3 px-6 rounded-lg transition"
+              >
+                اكمل رحلتك عبر الزمن
+              </button>
             </div>
+          </div>
         </div>
-    </section>
+      </section>
+
+      <!-- Saturn Section -->
+      <section id="saturn-section" class="planet-section">
+        <div
+          class="max-w-6xl w-full flex flex-col lg:flex-row-reverse items-center justify-between gap-10"
+        >
+          <!-- 🪐 Planet Visual -->
+          <div
+            class="relative w-full lg:w-3/5 h-[400px] lg:h-[600px] flex items-center justify-center"
+          >
+            <div
+              id="saturn-visual"
+              class="planet-visual w-[350px] h-[350px] rounded-full bg-yellow-200 shadow-[0_0_40px_15px_rgba(255,255,200,0.3)]"
+            ></div>
+          </div>
+
+          <!-- 📋 Planet Info -->
+          <div
+            class="bg-gray-900/70 backdrop-blur-md rounded-xl p-8 lg:w-3/5 border border-gray-700 shadow-2xl text-right"
+          >
+            <!-- Time Light -->
+            <div
+              class="bg-purple-900/50 text-purple-300 text-xs font-semibold px-3 py-1 rounded-full inline-block mb-6"
+            >
+              الزمن الضوئي: ٨٠ دقيقة
+            </div>
+
+            <!-- Planet Title -->
+            <h2 class="text-5xl font-extrabold text-white mb-2">زحل</h2>
+            <p class="text-2xl text-white/50 mb-8">Saturn</p>
+
+            <!-- Main Fact -->
+            <p
+              class="text-yellow-400 text-lg font-semibold mb-8 border-r-4 border-yellow-400 pr-3"
+            >
+              الكوكب ذو الحلقات الرائعة
+            </p>
+
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-2 gap-6 mb-10">
+              <div class="text-right">
+                <p class="text-sm text-gray-400">القطر</p>
+                <p class="text-xl font-bold text-white">١١٦,٤٦٠ كم</p>
+              </div>
+              <div class="text-right">
+                <p class="text-sm text-gray-400">المسافة من الشمس</p>
+                <p class="text-xl font-bold text-white">١.٤ مليار كم</p>
+              </div>
+              <div class="text-right">
+                <p class="text-sm text-gray-400">اليوم</p>
+                <p class="text-xl font-bold text-white">١٠.٧ ساعة</p>
+              </div>
+              <div class="text-right">
+                <p class="text-sm text-gray-400">السنة</p>
+                <p class="text-xl font-bold text-white">٢٩.٥ سنة أرضية</p>
+              </div>
+            </div>
+
+            <!-- Highlighted Fact Button -->
+            <button
+              class="w-full bg-purple-700/50 text-purple-300 font-semibold py-3 px-6 rounded-lg mb-4 hover:bg-purple-600/70 transition"
+            >
+              حقيقة علمية: كثافته أقل من كثافة الماء
+            </button>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col gap-4">
+              <button
+                data-planet="saturn"
+                class="quiz-btn w-full border border-yellow-500 text-yellow-500 font-semibold py-3 px-6 rounded-lg hover:bg-yellow-500 hover:text-black transition"
+              >
+                اختبر معلوماتك
+              </button>
+              <button
+                onclick="scrollToPlanet('mars-section')"
+                class="w-full gradient-btn text-white font-semibold py-3 px-6 rounded-lg transition"
+              >
+                اكمل رحلتك عبر الزمن
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Mars Section -->
+      <section id="mars-section" class="planet-section">
+        <div
+          class="max-w-6xl w-full flex flex-col lg:flex-row-reverse items-center justify-between gap-10"
+        >
+          <!-- 🪐 Planet Visual -->
+          <div
+            class="relative w-full lg:w-3/5 h-[400px] lg:h-[600px] flex items-center justify-center"
+          >
+            <div
+              id="mars-visual"
+              class="planet-visual w-[350px] h-[350px] rounded-full bg-red-500 shadow-[0_0_40px_15px_rgba(255,100,100,0.3)]"
+            ></div>
+          </div>
+
+          <!-- 📋 Planet Info -->
+          <div
+            class="bg-gray-900/70 backdrop-blur-md rounded-xl p-8 lg:w-3/5 border border-gray-700 shadow-2xl text-right"
+          >
+            <!-- Time Light -->
+            <div
+              class="bg-purple-900/50 text-purple-300 text-xs font-semibold px-3 py-1 rounded-full inline-block mb-6"
+            >
+              الزمن الضوئي: ١٣ دقيقة
+            </div>
+
+            <!-- Planet Title -->
+            <h2 class="text-5xl font-extrabold text-white mb-2">المريخ</h2>
+            <p class="text-2xl text-white/50 mb-8">Mars</p>
+
+            <!-- Main Fact -->
+            <p
+              class="text-yellow-400 text-lg font-semibold mb-8 border-r-4 border-yellow-400 pr-3"
+            >
+              الكوكب الأحمر
+            </p>
+
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-2 gap-6 mb-10">
+              <div class="text-right">
+                <p class="text-sm text-gray-400">القطر</p>
+                <p class="text-xl font-bold text-white">٦,٧٩٢ كم</p>
+              </div>
+              <div class="text-right">
+                <p class="text-sm text-gray-400">المسافة من الشمس</p>
+                <p class="text-xl font-bold text-white">٢٢٧.٩ مليون كم</p>
+              </div>
+              <div class="text-right">
+                <p class="text-sm text-gray-400">اليوم</p>
+                <p class="text-xl font-bold text-white">٢٤.٦ ساعة</p>
+              </div>
+              <div class="text-right">
+                <p class="text-sm text-gray-400">السنة</p>
+                <p class="text-xl font-bold text-white">٦٨٧ يوم أرضي</p>
+              </div>
+            </div>
+
+            <!-- Highlighted Fact Button -->
+            <button
+              class="w-full bg-purple-700/50 text-purple-300 font-semibold py-3 px-6 rounded-lg mb-4 hover:bg-purple-600/70 transition"
+            >
+              حقيقة علمية: يحتوي على أعلى جبل في النظام الشمسي
+            </button>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col gap-4">
+              <button
+                data-planet="mars"
+                class="quiz-btn w-full border border-yellow-500 text-yellow-500 font-semibold py-3 px-6 rounded-lg hover:bg-yellow-500 hover:text-black transition"
+              >
+                اختبر معلوماتك
+              </button>
+              <button
+                class="w-full gradient-btn text-white font-semibold py-3 px-6 rounded-lg transition"
+              >
+                اكمل رحلتك عبر الزمن
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
 
     <!-- Coming Soon -->
     <section class="z-10 w-full max-w-4xl mx-auto text-center py-20">
-        <div class="mb-10 text-gray-400 text-lg">
-            الزمن الضوئي: ٥ ساعات وما بعد...
-        </div>
+      <div class="mb-10 text-gray-400 text-lg">
+        الزمن الضوئي: ٥ ساعات وما بعد...
+      </div>
 
-        <h2 class="text-5xl md:text-6xl font-extrabold mb-7 pb-5 tracking-wider gradient-text">
-            ما وراء النظام الشمسي
-        </h2>
+      <h2
+        class="text-5xl md:text-6xl font-extrabold mb-7 pb-5 tracking-wider gradient-text"
+      >
+        ما وراء النظام الشمسي
+      </h2>
 
-        <p class="text-gray-400 max-w-2xl mx-auto leading-relaxed mb-12 text-lg">
-            الرحلة لا تنتهي هنا. حزام كايبر، وسحابة أورت، وأخيراً النجوم البعيدة التي تبعد سنوات ضوئية عنا. الكون أوسع
-            مما يمكننا تخيله!
-        </p>
+      <p class="text-gray-400 max-w-2xl mx-auto leading-relaxed mb-12 text-lg">
+        الرحلة لا تنتهي هنا. حزام كايبر، وسحابة أورت، وأخيراً النجوم البعيدة
+        التي تبعد سنوات ضوئية عنا. الكون أوسع مما يمكننا تخيله!
+      </p>
 
-        <p class="text-gray-400 max-w-2xl mx-auto leading-relaxed mb-12 text-lg">
-            استعد لاستكشاف أعماق الفضاء المجهول!
-        </p>
+      <p class="text-gray-400 max-w-2xl mx-auto leading-relaxed mb-12 text-lg">
+        استعد لاستكشاف أعماق الفضاء المجهول!
+      </p>
 
-        <!-- <div class="flex flex-wrap justify-center gap-6 mb-16">
-            <div
-                class="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-lg p-6 w-full sm:w-64 flex flex-col justify-between items-center text-center hover:scale-105 transition-transform duration-300 cursor-pointer">
-                <h3 class="font-bold text-xl mb-2 text-white">النجوم البعيدة</h3>
-                <p class="text-gray-400 text-sm">سنوات ضوئية</p>
-            </div>
-
-            <div
-                class="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-lg p-6 w-full sm:w-64 flex flex-col justify-between items-center text-center hover:scale-105 transition-transform duration-300 cursor-pointer">
-                <h3 class="font-bold text-xl mb-2 text-white">سحابة أورت</h3>
-                <p class="text-gray-400 text-sm">المجموعة الجليدية المتجمدة</p>
-            </div>
-
-            <div
-                class="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-lg p-6 w-full sm:w-64 flex flex-col justify-between items-center text-center hover:scale-105 transition-transform duration-300 cursor-pointer">
-                <h3 class="font-bold text-xl mb-2 text-white">حزام كايبر</h3>
-                <p class="text-gray-400 text-sm">منطقة الكويكبات الجليدية</p>
-            </div>
-        </div> -->
-
-        <button class="gradient-btn text-white font-semibold py-2 px-7 rounded-md text-lg hover:opacity-90 transition">
-            ابدأ رحلة جديدة!
-        </button>
+      <button
+        class="gradient-btn text-white font-semibold py-2 px-7 rounded-md text-lg hover:opacity-90 transition"
+      >
+        ابدأ رحلة جديدة!
+      </button>
     </section>
 
     <!-- the footer -->
-    <footer class="static w-full bg-black/80 border-t border-gray-800 text-gray-400 py-8 z-10">
-        <div class="max-w-7xl mx-auto px-6 text-right pb-16">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-10 md:gap-8">
+    <footer
+      class="static w-full bg-black/80 border-t border-gray-800 text-gray-400 py-8 z-10"
+    >
+      <div class="max-w-7xl mx-auto px-6 text-right pb-16">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-10 md:gap-8">
+          <div class="md:col-span-1">
+            <h4 class="text-yellow-400 text-xl font-bold mb-4">CosmoDive</h4>
+            <p class="text-sm leading-relaxed">
+              رحلة تعليمية تفاعلية عبر الفضاء لاستكشاف عجائب الكون بطريقة فريدة
+              ومبتكرة.
+            </p>
+          </div>
 
-                <div class="md:col-span-1">
-                    <h4 class="text-yellow-400 text-xl font-bold mb-4">CosmoDive</h4>
-                    <p class="text-sm leading-relaxed">
-                        رحلة تعليمية تفاعلية عبر الفضاء لاستكشاف عجائب الكون بطريقة فريدة ومبتكرة.
-                    </p>
-                </div>
+          <div>
+            <h4 class="text-white text-xl font-bold mb-4">روابط سريعة</h4>
+            <ul class="space-y-2 text-sm">
+              <li>
+                <a href="#" class="hover:text-yellow-400 transition"
+                  >حول المشروع</a
+                >
+              </li>
+              <li>
+                <a href="#" class="hover:text-yellow-400 transition"
+                  >اتصل بنا</a
+                >
+              </li>
+              <li>
+                <a href="#" class="hover:text-yellow-400 transition"
+                  >سياسة الخصوصية</a
+                >
+              </li>
+            </ul>
+          </div>
 
-                <div>
-                    <h4 class="text-white text-xl font-bold mb-4">روابط سريعة</h4>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="#" class="hover:text-yellow-400 transition">حول المشروع</a></li>
-                        <li><a href="#" class="hover:text-yellow-400 transition">اتصل بنا</a></li>
-                        <li><a href="#" class="hover:text-yellow-400 transition">سياسة الخصوصية</a></li>
-                    </ul>
-                </div>
+          <div>
+            <h4 class="text-white text-xl font-bold mb-4">المصادر</h4>
+            <ul class="space-y-2 text-sm">
+              <li>
+                <a href="#" class="hover:text-yellow-400 transition"
+                  >NASA API</a
+                >
+              </li>
+              <li>
+                <a href="#" class="hover:text-yellow-400 transition"
+                  >موسوعة الفضاء</a
+                >
+              </li>
+              <li>
+                <a href="#" class="hover:text-yellow-400 transition"
+                  >دروس تعليمية</a
+                >
+              </li>
+            </ul>
+          </div>
 
-                <div>
-                    <h4 class="text-white text-xl font-bold mb-4">المصادر</h4>
-                    <ul class="space-y-2 text-sm">
-                        <li><a href="#" class="hover:text-yellow-400 transition">NASA API</a></li>
-                        <li><a href="#" class="hover:text-yellow-400 transition">موسوعة الفضاء</a></li>
-                        <li><a href="#" class="hover:text-yellow-400 transition">دروس تعليمية</a></li>
-                    </ul>
-                </div>
-
-                <div class="hidden md:block">
-                </div>
-            </div>
+          <div class="hidden md:block"></div>
         </div>
+      </div>
     </footer>
 
     <!-- the chatbot button  -->
     <div class="fixed bottom-24 left-6 z-50">
-        <button class="hover:scale-110 transition-transform duration-300">
-            <img src="images/chatbot.png" alt="Chatbot Icon" class="w-20 h-20" />
-        </button>
+      <button class="hover:scale-110 transition-transform duration-300">
+        <img src="images/chatbot.png" alt="Chatbot Icon" class="w-20 h-20" />
+      </button>
     </div>
 
     <!-- the status bar at the bottom of the page -->
     <div
-        class="fixed bottom-0 left-0 w-full bg-black/80 backdrop-blur-sm border-t border-gray-700 text-gray-300 text-sm h-20 z-40">
-        <div class="max-w-full mx-auto flex h-full justify-between">
-
-            <!-- الزمن الضوئي (يمين) -->
-            <div class="flex items-center justify-center px-6 bg-black/30 h-full border-r border-black/30">
-                <div class="text-lg font-bold">
-                    <span class="text-gray-400">الزمن الضوئي المقطوع:</span>
-                    <span id="lightTime" class="gradient-text">—</span>
-                </div>
-            </div>
-
-            <!-- الموقع الحالي (يسار) -->
-            <div class="flex items-center px-6 text-white text-base">
-                <span class="text-gray-400">الموقع الحالي:</span>
-                <span id="currentLocation" class="font-bold text-white ml-2">أورانوس</span>
-            </div>
-
+      class="fixed bottom-0 left-0 w-full bg-black/80 backdrop-blur-sm border-t border-gray-700 text-gray-300 text-sm h-20 z-40"
+    >
+      <div class="max-w-full mx-auto flex h-full justify-between">
+        <!-- الزمن الضوئي (يمين) -->
+        <div
+          class="flex items-center justify-center px-6 bg-black/30 h-full border-r border-black/30"
+        >
+          <div class="text-lg font-bold">
+            <span class="text-gray-400">الزمن الضوئي المقطوع:</span>
+            <span id="lightTime" class="gradient-text">—</span>
+          </div>
         </div>
+
+        <!-- الموقع الحالي (يسار) -->
+        <div class="flex items-center px-6 text-white text-base">
+          <span class="text-gray-400">الموقع الحالي:</span>
+          <span id="currentLocation" class="font-bold text-white ml-2"
+            >الشمس</span
+          >
+        </div>
+      </div>
     </div>
 
+    <!-- Quiz Popup -->
+    <div id="quiz-popup" class="popup-overlay">
+      <div class="popup-content">
+        <!-- Quiz Header -->
+        <h3
+          class="text-3xl font-extrabold text-white mb-8 flex items-center justify-end gap-3 flex-row-reverse"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="28"
+            height="28"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="text-yellow-400"
+          >
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+            <path d="M12 17h.01"></path>
+          </svg>
+          اختبر معلوماتك
+        </h3>
+
+        <!-- Question -->
+        <p
+          id="quiz-question"
+          class="text-xl text-gray-300 font-medium mb-10 border-r-4 border-purple-500 pr-3"
+        >
+          لماذا نُسمّي المريخ بالكوكب الأحمر؟
+        </p>
+
+        <!-- Options -->
+        <div id="quiz-options" class="space-y-4">
+          <!-- Options will be dynamically added here -->
+        </div>
+
+        <!-- Continue Button -->
+        <div class="mt-8">
+          <button
+            id="quiz-next-btn"
+            class="gradient-btn text-white font-semibold py-3 px-6 rounded-md transition w-full"
+          >
+            التالي
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Confetti Container -->
+    <div id="confetti-container" class="confetti-container"></div>
+
     <script>
-        /*
-        مثال بسيط لتحويل زمن (ساعات + دقائق) إلى سنوات (سنة ضوئية تعبر عن وحدة الزمن هنا)
-        ملاحظة: السنة المستخدمة هنا هي السنة الجوليانية التقريبية (~31557600 ثانية).
-        - عدّل القيم hours و minutes بحسب ما تود عرضه.
-        - أو استخدم الدالة updateLightTime(hour, minute) لتحديث ديناميكي.
-        */
-        (function () {
-            const yearSeconds = 31557600; // ثانية في السنة التقريبية
+      // بيانات الكواكب
+      const planetsData = {
+        venus: {
+          name: "الزهرة",
+          englishName: "Venus",
+          lightTime: "٥ دقيقة",
+          mainFact: "أسخن كوكب في النظام الشمسي",
+          diameter: "١٢,١٠٤ كم",
+          distance: "١٠٨.٢ مليون كم",
+          day: "٢٤٣ يوم أرضي",
+          year: "٢٢٥ يوم أرضي",
+          fact: "يدور في الاتجاه المعاكس",
+          color: "bg-yellow-500",
+          shadow: "rgba(255,200,150,0.3)",
+          quizQuestion: "لماذا نُسمّي الزهرة بـ 'توأم الأرض'؟",
+          quizOptions: [
+            "أ. بسبب تشابه الحجم والكتلة",
+            "ب. لأنه أقرب كوكب للأرض",
+            "ج. لأنه يظهر في السماء كنجم ساطع",
+            "د. لأنه يحتوي على غلاف جوي مشابه",
+          ],
+          correctAnswer: 0,
+        },
+        saturn: {
+          name: "زحل",
+          englishName: "Saturn",
+          lightTime: "٨٠ دقيقة",
+          mainFact: "الكوكب ذو الحلقات الرائعة",
+          diameter: "١١٦,٤٦٠ كم",
+          distance: "١.٤ مليار كم",
+          day: "١٠.٧ ساعة",
+          year: "٢٩.٥ سنة أرضية",
+          fact: "كثافته أقل من كثافة الماء",
+          color: "bg-yellow-200",
+          shadow: "rgba(255,255,200,0.3)",
+          quizQuestion: "مم تتكون حلقات زحل؟",
+          quizOptions: [
+            "أ. من قطع الجليد والصخور",
+            "ب. من الغاز الساخن",
+            "ج. من الغبار الكوني",
+            "د. من البلورات الثلجية النقية",
+          ],
+          correctAnswer: 0,
+        },
+        mars: {
+          name: "المريخ",
+          englishName: "Mars",
+          lightTime: "١٣ دقيقة",
+          mainFact: "الكوكب الأحمر",
+          diameter: "٦,٧٩٢ كم",
+          distance: "٢٢٧.٩ مليون كم",
+          day: "٢٤.٦ ساعة",
+          year: "٦٨٧ يوم أرضي",
+          fact: "يحتوي على أعلى جبل في النظام الشمسي",
+          color: "bg-red-500",
+          shadow: "rgba(255,100,100,0.3)",
+          quizQuestion: "لماذا نُسمّي المريخ بالكوكب الأحمر؟",
+          quizOptions: [
+            "أ. بسبب أكسيد الحديد (الصدأ)",
+            "ب. لسبب درجة الحرارة العالية",
+            "ج. لسبب الغلاف الجوي",
+            "د. بسبب البراكين",
+          ],
+          correctAnswer: 0,
+        },
+      };
 
-            // مثال ثابت — عدّل هذه القيم أو اجعلها ديناميكية
-            let hours = 4;
-            let minutes = 5;
+      let score = 0;
 
-            function toLightYears(h, m) {
-                const seconds = (h * 3600) + (m * 60);
-                const years = seconds / yearSeconds;
-                // إذا كانت القيمة أقل من 1 سنة أعرض 6 منازل عشرية، وإلا 3 منازل
-                return years < 1 ? years.toFixed(6) : years.toFixed(3);
+      // عناصر DOM
+      const startJourneyBtn = document.getElementById("start-journey-btn");
+      const planetSections = document.querySelectorAll(".planet-section");
+      const quizPopup = document.getElementById("quiz-popup");
+      const quizQuestion = document.getElementById("quiz-question");
+      const quizOptions = document.getElementById("quiz-options");
+      const quizNextBtn = document.getElementById("quiz-next-btn");
+      const currentLocation = document.getElementById("currentLocation");
+      const scoreElement = document.getElementById("score-value");
+      const confettiContainer = document.getElementById("confetti-container");
+
+      // تهيئة التطبيق
+      function init() {
+        // إضافة الأحداث
+        startJourneyBtn.addEventListener("click", startJourney);
+
+        // إضافة أحداث لأزرار الاختبار
+        document.querySelectorAll(".quiz-btn").forEach((btn) => {
+          btn.addEventListener("click", function () {
+            const planet = this.getAttribute("data-planet");
+            showQuiz(planet);
+          });
+        });
+
+        // إضافة حدث لإغلاق النافذة المنبثقة
+        quizPopup.addEventListener("click", function (e) {
+          if (e.target === quizPopup) {
+            hideQuiz();
+          }
+        });
+
+        // إضافة حدث للتمرير
+        window.addEventListener("scroll", handleScroll);
+
+        // تحديث النقاط
+        updateScore();
+
+        // تهيئة أول قسم كوكب
+        if (planetSections.length > 0) {
+          planetSections[0].classList.add("active");
+        }
+      }
+
+      // بدء الرحلة
+      function startJourney() {
+        document.querySelector("main").classList.add("hidden-section");
+        document
+          .getElementById("planets-container")
+          .classList.remove("hidden-section");
+        scrollToPlanet("venus-section");
+      }
+
+      // التمرير إلى كوكب معين
+      function scrollToPlanet(planetId) {
+        const planetSection = document.getElementById(planetId);
+        if (planetSection) {
+          planetSection.scrollIntoView({ behavior: "smooth" });
+
+          // تحديث الموقع الحالي
+          const planetName = planetSection.querySelector("h2").textContent;
+          currentLocation.textContent = planetName;
+        }
+      }
+
+      // التعامل مع التمرير
+      function handleScroll() {
+        planetSections.forEach((section) => {
+          const sectionTop = section.getBoundingClientRect().top;
+          const sectionHeight = section.offsetHeight;
+          const windowHeight = window.innerHeight;
+
+          // إذا كان القسم مرئياً في الشاشة
+          if (
+            sectionTop < windowHeight * 0.75 &&
+            sectionTop > -sectionHeight * 0.25
+          ) {
+            section.classList.add("active");
+
+            // تحديث الموقع الحالي
+            const planetName = section.querySelector("h2").textContent;
+            currentLocation.textContent = planetName;
+          }
+        });
+      }
+
+      // عرض الاختبار
+      function showQuiz(planetKey) {
+        const planet = planetsData[planetKey];
+
+        // تحديث سؤال الاختبار
+        quizQuestion.textContent = planet.quizQuestion;
+
+        // تحديث خيارات الاختبار
+        quizOptions.innerHTML = "";
+        planet.quizOptions.forEach((option, index) => {
+          const button = document.createElement("button");
+          button.className =
+            "w-full text-right bg-gray-800/80 border border-transparent text-white py-4 px-6 rounded-lg font-semibold hover:bg-purple-700/60 transition duration-300 shadow-md quiz-option";
+          button.textContent = option;
+          button.dataset.index = index;
+          button.dataset.correct = index === planet.correctAnswer;
+          button.addEventListener("click", selectAnswer);
+          quizOptions.appendChild(button);
+        });
+
+        // إعادة تعيين زر التالي
+        quizNextBtn.textContent = "التالي";
+        quizNextBtn.onclick = function () {
+          hideQuiz();
+        };
+
+        // عرض النافذة المنبثقة
+        quizPopup.classList.add("active");
+      }
+
+      // إخفاء الاختبار
+      function hideQuiz() {
+        quizPopup.classList.remove("active");
+      }
+
+      // اختيار إجابة
+      function selectAnswer(event) {
+        const isCorrect = event.target.dataset.correct === "true";
+        const options = document.querySelectorAll(".quiz-option");
+
+        // إزالة التحديد من جميع الخيارات
+        options.forEach((option) => {
+          option.classList.remove(
+            "bg-purple-700",
+            "border-purple-400",
+            "bg-green-600",
+            "bg-red-600"
+          );
+          option.classList.add("bg-gray-800/80", "border-transparent");
+        });
+
+        // تحديد الخيار المختار
+        if (isCorrect) {
+          event.target.classList.remove("bg-gray-800/80", "border-transparent");
+          event.target.classList.add("bg-green-600", "border-green-400");
+
+          // زيادة النقاط
+          score += 10;
+          updateScore();
+
+          // عرض المفرقعات
+          showConfetti();
+
+          // تحديث زر التالي
+          quizNextBtn.textContent = "ممتاز! التالي";
+        } else {
+          event.target.classList.remove("bg-gray-800/80", "border-transparent");
+          event.target.classList.add("bg-red-600", "border-red-400");
+
+          // إظهار الإجابة الصحيحة
+          options.forEach((option) => {
+            if (option.dataset.correct === "true") {
+              option.classList.remove("bg-gray-800/80", "border-transparent");
+              option.classList.add("bg-green-600", "border-green-400");
             }
+          });
 
-            function updateLightTime(h, m) {
-                const el = document.getElementById('lightTime');
-                if (!el) return;
-                el.textContent = `${toLightYears(h, m)} سنة ضوئية`;
-            }
+          // تحديث زر التالي
+          quizNextBtn.textContent = "حاول مرة أخرى! التالي";
+        }
+      }
 
-            // تشغيل المرة الأولى بالقيم الافتراضية
-            updateLightTime(hours, minutes);
+      // عرض المفرقعات
+      function showConfetti() {
+        confetti({
+          particleCount: 150,
+          spread: 70,
+          origin: { y: 0.6 },
+          colors: ["#e38a23", "#8b1c85", "#ffffff", "#ffd700"],
+        });
+      }
 
-            // --- مثال لاستخدام ديناميكي:
-            // إذا أردت تحديث القيمة لاحقًا:
-            // updateLightTime(10, 30);
+      // تحديث النقاط
+      function updateScore() {
+        scoreElement.textContent = score;
+      }
 
-            // --- مثال: لو كان لديك زمن مخزن في data-attributes:
-            // const container = document.querySelector('.fixed');
-            // if (container && container.dataset.hours) {
-            //   updateLightTime(+container.dataset.hours, +container.dataset.minutes || 0);
-            // }
-        })();
+      // تشغيل التطبيق عند تحميل الصفحة
+      document.addEventListener("DOMContentLoaded", init);
+
+      // دالة الزمن الضوئي (كما هي)
+      (function () {
+        const yearSeconds = 31557600;
+
+        let hours = 4;
+        let minutes = 5;
+
+        function toLightYears(h, m) {
+          const seconds = h * 3600 + m * 60;
+          const years = seconds / yearSeconds;
+          return years < 1 ? years.toFixed(6) : years.toFixed(3);
+        }
+
+        function updateLightTime(h, m) {
+          const el = document.getElementById("lightTime");
+          if (!el) return;
+          el.textContent = `${toLightYears(h, m)} سنة ضوئية`;
+        }
+
+        updateLightTime(hours, minutes);
+      })();
     </script>
-
-</body>
-
+  </body>
 </html>
