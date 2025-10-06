@@ -2,7 +2,23 @@
 <html lang="ar" dir="rtl">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-s      .confetti-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1000;
+      }
+
+
+
+      /* Radial gradient utility */
+      .bg-gradient-radial {
+        background: radial-gradient(circle, var(--tw-gradient-stops));
+      }
+    </style>/>
     <title>CosmoDive - رحلة الضوء عبر الفضاء</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap"
@@ -234,6 +250,7 @@
         <button
           id="start-journey-btn"
           class="gradient-btn text-white font-semibold py-2 px-6 rounded-md transition"
+          onclick="startJourney()"
         >
           ابدأ الرحلة
         </button>
@@ -247,33 +264,171 @@
 
     <!-- Planet Sections -->
     <div id="planets-container" class="w-full">
-      <!-- Venus Section -->
-      <section id="venus-section" class="planet-section">
-        <div
-          class="max-w-6xl w-full flex flex-col lg:flex-row-reverse items-center justify-between gap-10"
-        >
-          <!-- 🪐 Planet Visual -->
+      <!-- Mercury Section -->
+      <section id="mercury-section" class="planet-section overflow-hidden mb-32">
+        <div class="max-w-6xl w-full relative h-screen flex items-center justify-center overflow-hidden mb-20">
+          
+          <!-- 🪐 Planet Visual - Initially Centered -->
           <div
-            class="relative w-full lg:w-3/5 h-[400px] lg:h-[600px] flex items-center justify-center"
+            id="mercury-container"
+            class="absolute transition-all duration-1000 ease-in-out flex flex-col items-center justify-center"
+            style="left: 50%; top: 50%; transform: translate(-50%, -50%);"
           >
+            <!-- Planet Name - Initially Visible -->
+            <h2 
+              id="mercury-title"
+              class="text-6xl font-extrabold text-white mb-8 text-center transition-all duration-500 opacity-100"
+              style="text-shadow: 2px 2px 4px rgba(0,0,0,0.7);"
+            >
+              عطارد
+            </h2>
+            
             <div
-              id="venus-visual"
-              class="planet-visual w-[350px] h-[350px] rounded-full bg-yellow-500 shadow-[0_0_40px_15px_rgba(255,200,150,0.3)]"
-            ></div>
+              id="mercury-visual"
+              class="w-[400px] h-[400px] rounded-full relative bg-cover bg-center cursor-pointer transition-all duration-1000"
+              style="
+                background-image: url('./images/Mercury.png'); 
+                background-size: cover; 
+                background-position: center; 
+                border: none; 
+                outline: none;
+              "
+              onclick="showMercuryInfo()"
+            >
+              <!-- Mercury Atmosphere Glow -->
+              <div class="absolute inset-0 rounded-full bg-gradient-radial from-transparent via-gray-400/20 to-orange-600/30 animate-pulse"></div>
+              
+              <!-- Hot Spots Effect -->
+              <div class="absolute top-1/4 left-1/3 w-6 h-6 rounded-full bg-orange-500/50 blur-sm animate-ping"></div>
+              <div class="absolute bottom-1/3 right-1/4 w-4 h-4 rounded-full bg-yellow-400/40 blur-sm animate-pulse" style="animation-delay: 1.5s;"></div>
+            </div>
           </div>
 
-          <!-- 📋 Planet Info -->
+          <!-- 📋 Planet Info - Initially Hidden -->
           <div
-            class="bg-gray-900/70 backdrop-blur-md rounded-xl p-8 lg:w-3/5 border border-gray-700 shadow-2xl text-right"
+            id="mercury-info"
+            class="absolute right-0 top-1/2 transform translate-y-[-50%] opacity-0 transition-all duration-1000 ease-in-out bg-gray-900/70 backdrop-blur-md rounded-xl p-8 w-[500px] border border-gray-700 shadow-2xl text-right z-10"
+            style="transform: translate(100%, -50%);"
           >
             <!-- Time Light -->
             <div
               class="bg-purple-900/50 text-purple-300 text-xs font-semibold px-3 py-1 rounded-full inline-block mb-6"
             >
-              الزمن الضوئي: ٥ دقيقة
+              اللون الذهبي: ٣ دقائق
             </div>
 
-            <!-- Planet Title -->
+            <h2 class="text-5xl font-extrabold text-white mb-2">عطارد</h2>
+            <p class="text-2xl text-white/50 mb-8">Mercury</p>
+
+            <!-- Main Fact -->
+            <p
+              class="text-orange-400 text-lg font-semibold mb-8 border-r-4 border-orange-400 pr-3"
+            >
+              أقرب كوكب للشمس
+            </p>
+
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-2 gap-6 mb-10">
+              <div class="text-right">
+                <p class="text-sm text-gray-400">القطر</p>
+                <p class="text-xl font-bold text-white">٤,٨٧٩ كم</p>
+              </div>
+              <div class="text-right">
+                <p class="text-sm text-gray-400">المسافة من الشمس</p>
+                <p class="text-xl font-bold text-white">٥٧.٩ مليون كم</p>
+              </div>
+              <div class="text-right">
+                <p class="text-sm text-gray-400">اليوم</p>
+                <p class="text-xl font-bold text-white">٥٩ يوم أرضي</p>
+              </div>
+              <div class="text-right">
+                <p class="text-sm text-gray-400">السنة</p>
+                <p class="text-xl font-bold text-white">٨٨ يوم أرضي</p>
+              </div>
+            </div>
+
+            <!-- Highlighted Fact Button -->
+            <button
+              class="w-full bg-purple-700/50 text-purple-300 font-semibold py-3 px-6 rounded-lg mb-4 hover:bg-purple-600/70 transition"
+            >
+              حقيقة علمية: أسرع كوكب في النظام الشمسي
+            </button>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col gap-4">
+              <button
+                data-planet="mercury"
+                class="quiz-btn w-full border border-orange-500 text-orange-500 font-semibold py-3 px-6 rounded-lg hover:bg-orange-500 hover:text-black transition"
+              >
+                اختبر معلوماتك
+              </button>
+              <button
+                onclick="continueFromMercury()"
+                class="w-full gradient-btn text-white font-semibold py-3 px-6 rounded-lg transition"
+              >
+                اكمل رحلتك عبر الزمن
+              </button>
+            </div>
+          </div>
+
+        </div>
+        <!-- Spacer for separation -->
+        <div class="h-40"></div>
+      </section>
+
+      <!-- Venus Section -->
+      <section id="venus-section" class="planet-section overflow-hidden mb-32">
+        <div class="max-w-6xl w-full relative h-screen flex items-center justify-center overflow-hidden mb-20">
+          
+          <!-- 🪐 Planet Visual - Initially Centered -->
+          <div
+            id="venus-container"
+            class="absolute transition-all duration-1000 ease-in-out flex flex-col items-center justify-center"
+            style="left: 50%; top: 50%; transform: translate(-50%, -50%);"
+          >
+            <!-- Planet Name - Initially Visible -->
+            <h2 
+              id="venus-title"
+              class="text-6xl font-extrabold text-white mb-8 text-center transition-all duration-500 opacity-100"
+              style="text-shadow: 2px 2px 4px rgba(0,0,0,0.7);"
+            >
+              الزهرة
+            </h2>
+            
+            <div
+              id="venus-visual"
+              class="w-[400px] h-[400px] rounded-full relative bg-cover bg-center cursor-pointer transition-all duration-1000"
+              style="
+                background-image: url('./images/venus.png'); 
+                background-size: cover; 
+                background-position: center; 
+                border: none; 
+                outline: none;
+              "
+              onclick="showVenusInfo()"
+            >
+              <!-- Venus Atmosphere Glow -->
+              <div class="absolute inset-0 rounded-full bg-gradient-radial from-transparent via-orange-400/20 to-yellow-600/30 animate-pulse"></div>
+              
+              <!-- Hot Spots Effect -->
+              <div class="absolute top-1/4 left-1/3 w-8 h-8 rounded-full bg-orange-400/40 blur-sm animate-ping"></div>
+              <div class="absolute bottom-1/3 right-1/4 w-6 h-6 rounded-full bg-yellow-400/30 blur-sm animate-pulse" style="animation-delay: 1s;"></div>
+            </div>
+          </div>
+
+          <!-- 📋 Planet Info - Initially Hidden -->
+          <div
+            id="venus-info"
+            class="absolute right-0 top-1/2 transform translate-y-[-50%] opacity-0 transition-all duration-1000 ease-in-out bg-gray-900/70 backdrop-blur-md rounded-xl p-8 w-[500px] border border-gray-700 shadow-2xl text-right z-10"
+            style="transform: translate(100%, -50%);"
+          >
+            <!-- Time Light -->
+            <div
+              class="bg-purple-900/50 text-purple-300 text-xs font-semibold px-3 py-1 rounded-full inline-block mb-6"
+            >
+              الزمن الضوئي: ٥ دقائق
+            </div>
+
             <h2 class="text-5xl font-extrabold text-white mb-2">الزهرة</h2>
             <p class="text-2xl text-white/50 mb-8">Venus</p>
 
@@ -320,70 +475,99 @@
                 اختبر معلوماتك
               </button>
               <button
-                onclick="scrollToPlanet('saturn-section')"
+                onclick="continueFromVenus()"
                 class="w-full gradient-btn text-white font-semibold py-3 px-6 rounded-lg transition"
               >
                 اكمل رحلتك عبر الزمن
               </button>
             </div>
           </div>
+
         </div>
+        <!-- Spacer for separation -->
+        <div class="h-40"></div>
       </section>
 
-      <!-- Saturn Section -->
-      <section id="saturn-section" class="planet-section">
-        <div
-          class="max-w-6xl w-full flex flex-col lg:flex-row-reverse items-center justify-between gap-10"
-        >
-          <!-- 🪐 Planet Visual -->
+      <!-- Earth Section -->
+      <section id="earth-section" class="planet-section overflow-hidden mb-32">
+        <div class="max-w-6xl w-full relative h-screen flex items-center justify-center overflow-hidden mb-20">
+          
+          <!-- 🌍 Planet Visual - Initially Centered -->
           <div
-            class="relative w-full lg:w-3/5 h-[400px] lg:h-[600px] flex items-center justify-center"
+            id="earth-container"
+            class="absolute transition-all duration-1000 ease-in-out flex flex-col items-center justify-center"
+            style="left: 50%; top: 50%; transform: translate(-50%, -50%);"
           >
+            <!-- Planet Name - Initially Visible -->
+            <h2 
+              id="earth-title"
+              class="text-6xl font-extrabold text-white mb-8 text-center transition-all duration-500 opacity-100"
+              style="text-shadow: 2px 2px 4px rgba(0,0,0,0.7);"
+            >
+              الأرض
+            </h2>
+            
             <div
-              id="saturn-visual"
-              class="planet-visual w-[350px] h-[350px] rounded-full bg-yellow-200 shadow-[0_0_40px_15px_rgba(255,255,200,0.3)]"
-            ></div>
+              id="earth-visual"
+              class="w-[400px] h-[400px] rounded-full relative bg-cover bg-center cursor-pointer transition-all duration-1000"
+              style="
+                background-image: url('./images/Earth.png'); 
+                background-size: cover; 
+                background-position: center; 
+                border: none; 
+                outline: none;
+              "
+              onclick="showEarthInfo()"
+            >
+              <!-- Earth Atmosphere Glow -->
+              <div class="absolute inset-0 rounded-full bg-gradient-radial from-transparent via-blue-400/20 to-green-600/30 animate-pulse"></div>
+              
+              <!-- Cloud Effect -->
+              <div class="absolute top-1/4 left-1/3 w-10 h-6 rounded-full bg-white/30 blur-sm animate-pulse"></div>
+              <div class="absolute bottom-1/3 right-1/4 w-8 h-4 rounded-full bg-white/20 blur-sm animate-pulse" style="animation-delay: 2s;"></div>
+            </div>
           </div>
 
-          <!-- 📋 Planet Info -->
+          <!-- 📋 Planet Info - Initially Hidden -->
           <div
-            class="bg-gray-900/70 backdrop-blur-md rounded-xl p-8 lg:w-3/5 border border-gray-700 shadow-2xl text-right"
+            id="earth-info"
+            class="absolute right-0 top-1/2 transform translate-y-[-50%] opacity-0 transition-all duration-1000 ease-in-out bg-gray-900/70 backdrop-blur-md rounded-xl p-8 w-[500px] border border-gray-700 shadow-2xl text-right z-10"
+            style="transform: translate(100%, -50%);"
           >
             <!-- Time Light -->
             <div
               class="bg-purple-900/50 text-purple-300 text-xs font-semibold px-3 py-1 rounded-full inline-block mb-6"
             >
-              الزمن الضوئي: ٨٠ دقيقة
+              الزمن الضوئي: ٨ دقائق
             </div>
 
-            <!-- Planet Title -->
-            <h2 class="text-5xl font-extrabold text-white mb-2">زحل</h2>
-            <p class="text-2xl text-white/50 mb-8">Saturn</p>
+            <h2 class="text-5xl font-extrabold text-white mb-2">الأرض</h2>
+            <p class="text-2xl text-white/50 mb-8">Earth</p>
 
             <!-- Main Fact -->
             <p
-              class="text-yellow-400 text-lg font-semibold mb-8 border-r-4 border-yellow-400 pr-3"
+              class="text-blue-400 text-lg font-semibold mb-8 border-r-4 border-blue-400 pr-3"
             >
-              الكوكب ذو الحلقات الرائعة
+              الكوكب الوحيد المعروف بوجود الحياة
             </p>
 
             <!-- Stats Grid -->
             <div class="grid grid-cols-2 gap-6 mb-10">
               <div class="text-right">
                 <p class="text-sm text-gray-400">القطر</p>
-                <p class="text-xl font-bold text-white">١١٦,٤٦٠ كم</p>
+                <p class="text-xl font-bold text-white">١٢,٧٤٢ كم</p>
               </div>
               <div class="text-right">
                 <p class="text-sm text-gray-400">المسافة من الشمس</p>
-                <p class="text-xl font-bold text-white">١.٤ مليار كم</p>
+                <p class="text-xl font-bold text-white">١٤٩.٦ مليون كم</p>
               </div>
               <div class="text-right">
                 <p class="text-sm text-gray-400">اليوم</p>
-                <p class="text-xl font-bold text-white">١٠.٧ ساعة</p>
+                <p class="text-xl font-bold text-white">٢٤ ساعة</p>
               </div>
               <div class="text-right">
                 <p class="text-sm text-gray-400">السنة</p>
-                <p class="text-xl font-bold text-white">٢٩.٥ سنة أرضية</p>
+                <p class="text-xl font-bold text-white">٣٦٥.٢٥ يوم</p>
               </div>
             </div>
 
@@ -391,46 +575,76 @@
             <button
               class="w-full bg-purple-700/50 text-purple-300 font-semibold py-3 px-6 rounded-lg mb-4 hover:bg-purple-600/70 transition"
             >
-              حقيقة علمية: كثافته أقل من كثافة الماء
+              حقيقة علمية: ٧١٪ من سطحها محيطات
             </button>
 
             <!-- Action Buttons -->
             <div class="flex flex-col gap-4">
               <button
-                data-planet="saturn"
-                class="quiz-btn w-full border border-yellow-500 text-yellow-500 font-semibold py-3 px-6 rounded-lg hover:bg-yellow-500 hover:text-black transition"
+                data-planet="earth"
+                class="quiz-btn w-full border border-blue-500 text-blue-500 font-semibold py-3 px-6 rounded-lg hover:bg-blue-500 hover:text-black transition"
               >
                 اختبر معلوماتك
               </button>
               <button
-                onclick="scrollToPlanet('mars-section')"
+                onclick="continueFromEarth()"
                 class="w-full gradient-btn text-white font-semibold py-3 px-6 rounded-lg transition"
               >
                 اكمل رحلتك عبر الزمن
               </button>
             </div>
           </div>
+
         </div>
+        <!-- Spacer for separation -->
+        <div class="h-40"></div>
       </section>
 
       <!-- Mars Section -->
-      <section id="mars-section" class="planet-section">
-        <div
-          class="max-w-6xl w-full flex flex-col lg:flex-row-reverse items-center justify-between gap-10"
-        >
-          <!-- 🪐 Planet Visual -->
+      <section id="mars-section" class="planet-section overflow-hidden mb-32">
+        <div class="max-w-6xl w-full relative h-screen flex items-center justify-center overflow-hidden mb-20">
+          
+          <!-- 🔴 Planet Visual - Initially Centered -->
           <div
-            class="relative w-full lg:w-3/5 h-[400px] lg:h-[600px] flex items-center justify-center"
+            id="mars-container"
+            class="absolute transition-all duration-1000 ease-in-out flex flex-col items-center justify-center"
+            style="left: 50%; top: 50%; transform: translate(-50%, -50%);"
           >
+            <!-- Planet Name - Initially Visible -->
+            <h2 
+              id="mars-title"
+              class="text-6xl font-extrabold text-white mb-8 text-center transition-all duration-500 opacity-100"
+              style="text-shadow: 2px 2px 4px rgba(0,0,0,0.7);"
+            >
+              المريخ
+            </h2>
+            
             <div
               id="mars-visual"
-              class="planet-visual w-[350px] h-[350px] rounded-full bg-red-500 shadow-[0_0_40px_15px_rgba(255,100,100,0.3)]"
-            ></div>
+              class="w-[400px] h-[400px] rounded-full relative bg-cover bg-center cursor-pointer transition-all duration-1000"
+              style="
+                background-image: url('./images/Mars.png'); 
+                background-size: cover; 
+                background-position: center; 
+                border: none; 
+                outline: none;
+              "
+              onclick="showMarsInfo()"
+            >
+              <!-- Mars Atmosphere Glow -->
+              <div class="absolute inset-0 rounded-full bg-gradient-radial from-transparent via-red-400/20 to-orange-600/30 animate-pulse"></div>
+              
+              <!-- Dust Storm Effect -->
+              <div class="absolute top-1/4 left-1/3 w-12 h-8 rounded-full bg-orange-400/30 blur-sm animate-ping"></div>
+              <div class="absolute bottom-1/3 right-1/4 w-8 h-6 rounded-full bg-red-400/25 blur-sm animate-pulse" style="animation-delay: 1.5s;"></div>
+            </div>
           </div>
 
-          <!-- 📋 Planet Info -->
+          <!-- 📋 Planet Info - Initially Hidden -->
           <div
-            class="bg-gray-900/70 backdrop-blur-md rounded-xl p-8 lg:w-3/5 border border-gray-700 shadow-2xl text-right"
+            id="mars-info"
+            class="absolute right-0 top-1/2 transform translate-y-[-50%] opacity-0 transition-all duration-1000 ease-in-out bg-gray-900/70 backdrop-blur-md rounded-xl p-8 w-[500px] border border-gray-700 shadow-2xl text-right z-10"
+            style="transform: translate(100%, -50%);"
           >
             <!-- Time Light -->
             <div
@@ -439,13 +653,12 @@
               الزمن الضوئي: ١٣ دقيقة
             </div>
 
-            <!-- Planet Title -->
             <h2 class="text-5xl font-extrabold text-white mb-2">المريخ</h2>
             <p class="text-2xl text-white/50 mb-8">Mars</p>
 
             <!-- Main Fact -->
             <p
-              class="text-yellow-400 text-lg font-semibold mb-8 border-r-4 border-yellow-400 pr-3"
+              class="text-red-400 text-lg font-semibold mb-8 border-r-4 border-red-400 pr-3"
             >
               الكوكب الأحمر
             </p>
@@ -481,18 +694,448 @@
             <div class="flex flex-col gap-4">
               <button
                 data-planet="mars"
-                class="quiz-btn w-full border border-yellow-500 text-yellow-500 font-semibold py-3 px-6 rounded-lg hover:bg-yellow-500 hover:text-black transition"
+                class="quiz-btn w-full border border-red-500 text-red-500 font-semibold py-3 px-6 rounded-lg hover:bg-red-500 hover:text-black transition"
               >
                 اختبر معلوماتك
               </button>
               <button
+                onclick="continueFromMars()"
                 class="w-full gradient-btn text-white font-semibold py-3 px-6 rounded-lg transition"
               >
                 اكمل رحلتك عبر الزمن
               </button>
             </div>
           </div>
+
         </div>
+        <!-- Spacer for separation -->
+        <div class="h-40"></div>
+      </section>
+
+      <!-- Jupiter Section -->
+      <section id="jupiter-section" class="planet-section overflow-hidden mb-32">
+        <div class="max-w-6xl w-full relative h-screen flex items-center justify-center overflow-hidden mb-20">
+          
+          <!-- 🪐 Planet Visual - Initially Centered -->
+          <div
+            id="jupiter-container"
+            class="absolute transition-all duration-1000 ease-in-out flex flex-col items-center justify-center"
+            style="left: 50%; top: 50%; transform: translate(-50%, -50%);"
+          >
+            <!-- Planet Name - Initially Visible -->
+            <h2 
+              id="jupiter-title"
+              class="text-6xl font-extrabold text-white mb-8 text-center transition-all duration-500 opacity-100"
+              style="text-shadow: 2px 2px 4px rgba(0,0,0,0.7);"
+            >
+              المشتري
+            </h2>
+            
+            <div
+              id="jupiter-visual"
+              class="w-[400px] h-[400px] rounded-full relative bg-cover bg-center cursor-pointer transition-all duration-1000"
+              style="
+                background-image: url('./images/jupiter.png'); 
+                background-size: cover; 
+                background-position: center; 
+                border: none; 
+                outline: none;
+              "
+              onclick="showJupiterInfo()"
+            >
+              <!-- Jupiter Atmosphere Glow -->
+              <div class="absolute inset-0 rounded-full bg-gradient-radial from-transparent via-orange-400/20 to-brown-600/30 animate-pulse"></div>
+              
+              <!-- Great Red Spot Effect -->
+              <div class="absolute top-1/2 left-1/3 w-16 h-10 rounded-full bg-red-500/40 blur-sm animate-pulse"></div>
+              <div class="absolute bottom-1/4 right-1/4 w-12 h-8 rounded-full bg-orange-400/30 blur-sm animate-pulse" style="animation-delay: 2s;"></div>
+            </div>
+          </div>
+
+          <!-- 📋 Planet Info - Initially Hidden -->
+          <div
+            id="jupiter-info"
+            class="absolute right-0 top-1/2 transform translate-y-[-50%] opacity-0 transition-all duration-1000 ease-in-out bg-gray-900/70 backdrop-blur-md rounded-xl p-8 w-[500px] border border-gray-700 shadow-2xl text-right z-10"
+            style="transform: translate(100%, -50%);"
+          >
+            <!-- Time Light -->
+            <div
+              class="bg-purple-900/50 text-purple-300 text-xs font-semibold px-3 py-1 rounded-full inline-block mb-6"
+            >
+              الزمن الضوئي: ٤٣ دقيقة
+            </div>
+
+            <h2 class="text-5xl font-extrabold text-white mb-2">المشتري</h2>
+            <p class="text-2xl text-white/50 mb-8">Jupiter</p>
+
+            <!-- Main Fact -->
+            <p
+              class="text-orange-400 text-lg font-semibold mb-8 border-r-4 border-orange-400 pr-3"
+            >
+              أكبر كوكب في النظام الشمسي
+            </p>
+
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-2 gap-6 mb-10">
+              <div class="text-right">
+                <p class="text-sm text-gray-400">القطر</p>
+                <p class="text-xl font-bold text-white">١٣٩,٨٢٠ كم</p>
+              </div>
+              <div class="text-right">
+                <p class="text-sm text-gray-400">المسافة من الشمس</p>
+                <p class="text-xl font-bold text-white">٧٧٨.٥ مليون كم</p>
+              </div>
+              <div class="text-right">
+                <p class="text-sm text-gray-400">اليوم</p>
+                <p class="text-xl font-bold text-white">٩.٩ ساعة</p>
+              </div>
+              <div class="text-right">
+                <p class="text-sm text-gray-400">السنة</p>
+                <p class="text-xl font-bold text-white">١١.٩ سنة أرضية</p>
+              </div>
+            </div>
+
+            <!-- Highlighted Fact Button -->
+            <button
+              class="w-full bg-purple-700/50 text-purple-300 font-semibold py-3 px-6 rounded-lg mb-4 hover:bg-purple-600/70 transition"
+            >
+              حقيقة علمية: له أكثر من ٧٩ قمراً
+            </button>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col gap-4">
+              <button
+                data-planet="jupiter"
+                class="quiz-btn w-full border border-orange-500 text-orange-500 font-semibold py-3 px-6 rounded-lg hover:bg-orange-500 hover:text-black transition"
+              >
+                اختبر معلوماتك
+              </button>
+              <button
+                onclick="continueFromJupiter()"
+                class="w-full gradient-btn text-white font-semibold py-3 px-6 rounded-lg transition"
+              >
+                اكمل رحلتك عبر الزمن
+              </button>
+            </div>
+          </div>
+
+        </div>
+        <!-- Spacer for separation -->
+        <div class="h-40"></div>
+      </section>
+
+      <!-- Saturn Section -->
+      <section id="saturn-section" class="planet-section overflow-hidden mb-32">
+        <div class="max-w-6xl w-full relative h-screen flex items-center justify-center overflow-hidden mb-20">
+          
+          <!-- 🪐 Planet Visual - Initially Centered -->
+          <div
+            id="saturn-container"
+            class="absolute transition-all duration-1000 ease-in-out flex flex-col items-center justify-center"
+            style="left: 50%; top: 50%; transform: translate(-50%, -50%);"
+          >
+            <!-- Planet Name - Initially Visible -->
+            <h2 
+              id="saturn-title"
+              class="text-6xl font-extrabold text-white mb-8 text-center transition-all duration-500 opacity-100"
+              style="text-shadow: 2px 2px 4px rgba(0,0,0,0.7);"
+            >
+              زحل
+            </h2>
+            
+            <div
+              id="saturn-visual"
+              class="w-[500px] h-[400px] relative bg-cover bg-center cursor-pointer transition-all duration-1000"
+              style="
+                background-image: url('./images/saturn.png'); 
+                background-size: contain; 
+                background-repeat: no-repeat;
+                background-position: center; 
+                border: none; 
+                outline: none;
+              "
+              onclick="showSaturnInfo()"
+            >
+              <!-- Saturn Ring Glow -->
+              <div class="absolute inset-0 bg-gradient-radial from-transparent via-yellow-400/10 to-amber-600/20 animate-pulse"></div>
+            </div>
+          </div>
+
+          <!-- 📋 Planet Info - Initially Hidden -->
+          <div
+            id="saturn-info"
+            class="absolute right-0 top-1/2 transform translate-y-[-50%] opacity-0 transition-all duration-1000 ease-in-out bg-gray-900/70 backdrop-blur-md rounded-xl p-8 w-[500px] border border-gray-700 shadow-2xl text-right z-10"
+            style="transform: translate(100%, -50%);"
+          >
+            <!-- Time Light -->
+            <div
+              class="bg-yellow-900/50 text-yellow-300 text-xs font-semibold px-3 py-1 rounded-full inline-block mb-6"
+            >
+              الزمن الضوئي: ٧٩ دقيقة
+            </div>
+
+            <h3 class="text-3xl font-bold text-white mb-6">
+              كوكب زحل - سيد الحلقات
+            </h3>
+
+            <!-- Statistics Grid -->
+            <div class="grid grid-cols-2 gap-4 mb-6 text-sm">
+              <div class="bg-gray-800/50 p-3 rounded-lg">
+                <div class="text-gray-400">البُعد عن الشمس</div>
+                <div class="text-white font-semibold">١.٤ مليار كم</div>
+              </div>
+              <div class="bg-gray-800/50 p-3 rounded-lg">
+                <div class="text-gray-400">القطر</div>
+                <div class="text-white font-semibold">١١٦٤٦٠ كم</div>
+              </div>
+              <div class="bg-gray-800/50 p-3 rounded-lg">
+                <div class="text-gray-400">اليوم</div>
+                <div class="text-white font-semibold">١٠.٧ ساعة</div>
+              </div>
+              <div class="bg-gray-800/50 p-3 rounded-lg">
+                <div class="text-gray-400">السنة</div>
+                <div class="text-white font-semibold">٢٩.٥ سنة أرضية</div>
+              </div>
+            </div>
+
+            <!-- Highlighted Fact Button -->
+            <button
+              class="w-full bg-yellow-700/50 text-yellow-300 font-semibold py-3 px-6 rounded-lg mb-4 hover:bg-yellow-600/70 transition"
+            >
+              حقيقة علمية: له أكثر من ٨٢ قمراً وحلقات رائعة
+            </button>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col gap-4">
+              <button
+                data-planet="saturn"
+                class="quiz-btn w-full border border-yellow-500 text-yellow-500 font-semibold py-3 px-6 rounded-lg hover:bg-yellow-500 hover:text-black transition"
+              >
+                اختبر معلوماتك
+              </button>
+              <button
+                onclick="continueFromSaturn()"
+                class="w-full gradient-btn text-white font-semibold py-3 px-6 rounded-lg transition"
+              >
+                اكمل رحلتك عبر الزمن
+              </button>
+            </div>
+          </div>
+
+        </div>
+        <!-- Spacer for separation -->
+        <div class="h-40"></div>
+      </section>
+
+      <!-- Uranus Section -->
+      <section id="uranus-section" class="planet-section overflow-hidden mb-32">
+        <div class="max-w-6xl w-full relative h-screen flex items-center justify-center overflow-hidden mb-20">
+          
+          <!-- 🪐 Planet Visual - Initially Centered -->
+          <div
+            id="uranus-container"
+            class="absolute transition-all duration-1000 ease-in-out flex flex-col items-center justify-center"
+            style="left: 50%; top: 50%; transform: translate(-50%, -50%);"
+          >
+            <!-- Planet Name - Initially Visible -->
+            <h2 
+              id="uranus-title"
+              class="text-6xl font-extrabold text-white mb-8 text-center transition-all duration-500 opacity-100"
+              style="text-shadow: 2px 2px 4px rgba(0,0,0,0.7);"
+            >
+              أورانوس
+            </h2>
+            
+            <div
+              id="uranus-visual"
+              class="w-[500px] h-[500px] relative bg-cover bg-center cursor-pointer transition-all duration-1000 flex items-center justify-center"
+              style="
+                background-image: url('./images/uranus.png'); 
+                background-size: contain; 
+                background-repeat: no-repeat;
+                background-position: center; 
+                border: none; 
+                outline: none;
+              "
+              onclick="showUranusInfo()"
+            >
+              <!-- Uranus Ice Glow -->
+              <div class="absolute inset-0 bg-gradient-radial from-transparent via-cyan-400/10 to-blue-600/20 animate-pulse"></div>
+              
+              <!-- Rotation Effects (Uranus rotates on its side) -->
+              <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[450px] h-[150px] border-2 border-cyan-300/40 rounded-full animate-pulse transform rotate-90"></div>
+              <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[470px] h-[160px] border border-blue-400/30 rounded-full animate-pulse transform rotate-90" style="animation-delay: 1.5s;"></div>
+            </div>
+          </div>
+
+          <!-- 📋 Planet Info - Initially Hidden -->
+          <div
+            id="uranus-info"
+            class="absolute right-0 top-1/2 transform translate-y-[-50%] opacity-0 transition-all duration-1000 ease-in-out bg-gray-900/70 backdrop-blur-md rounded-xl p-8 w-[500px] border border-gray-700 shadow-2xl text-right z-10"
+            style="transform: translate(100%, -50%);"
+          >
+            <!-- Time Light -->
+            <div
+              class="bg-cyan-900/50 text-cyan-300 text-xs font-semibold px-3 py-1 rounded-full inline-block mb-6"
+            >
+              الزمن الضوئي: ٢.٧ ساعة
+            </div>
+
+            <h3 class="text-3xl font-bold text-white mb-6">
+              كوكب أورانوس - الكوكب الجليدي
+            </h3>
+
+            <!-- Statistics Grid -->
+            <div class="grid grid-cols-2 gap-4 mb-6 text-sm">
+              <div class="bg-gray-800/50 p-3 rounded-lg">
+                <div class="text-gray-400">البُعد عن الشمس</div>
+                <div class="text-white font-semibold">٢.٩ مليار كم</div>
+              </div>
+              <div class="bg-gray-800/50 p-3 rounded-lg">
+                <div class="text-gray-400">القطر</div>
+                <div class="text-white font-semibold">٥١١١٨ كم</div>
+              </div>
+              <div class="bg-gray-800/50 p-3 rounded-lg">
+                <div class="text-gray-400">اليوم</div>
+                <div class="text-white font-semibold">١٧.٢ ساعة</div>
+              </div>
+              <div class="bg-gray-800/50 p-3 rounded-lg">
+                <div class="text-gray-400">السنة</div>
+                <div class="text-white font-semibold">٨٤ سنة أرضية</div>
+              </div>
+            </div>
+
+            <!-- Highlighted Fact Button -->
+            <button
+              class="w-full bg-cyan-700/50 text-cyan-300 font-semibold py-3 px-6 rounded-lg mb-4 hover:bg-cyan-600/70 transition">
+              حقيقة علمية: يدور على جانبه ويحتوي على جليد مائي
+            </button>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col gap-4">
+              <button
+                data-planet="uranus"
+                class="quiz-btn w-full border border-cyan-500 text-cyan-500 font-semibold py-3 px-6 rounded-lg hover:bg-cyan-500 hover:text-black transition"
+              >
+                اختبر معلوماتك
+              </button>
+              <button
+                onclick="continueFromUranus()"
+                class="w-full gradient-btn text-white font-semibold py-3 px-6 rounded-lg transition"
+              >
+                اكمل رحلتك عبر الزمن
+              </button>
+            </div>
+          </div>
+
+        </div>
+        <!-- Spacer for separation -->
+        <div class="h-40"></div>
+      </section>
+
+      <!-- Neptune Section -->
+      <section id="neptune-section" class="planet-section overflow-hidden mb-32">
+        <div class="max-w-6xl w-full relative h-screen flex items-center justify-center overflow-hidden mb-20">
+          
+          <!-- 🪐 Planet Visual - Initially Centered -->
+          <div
+            id="neptune-container"
+            class="absolute transition-all duration-1000 ease-in-out flex flex-col items-center justify-center"
+            style="left: 50%; top: 50%; transform: translate(-50%, -50%);">
+            <!-- Planet Name - Initially Visible -->
+            <h2 
+              id="neptune-title"
+              class="text-6xl font-extrabold text-white mb-8 text-center transition-all duration-500 opacity-100"
+              style="text-shadow: 2px 2px 4px rgba(0,0,0,0.7);"
+            >
+              نبتون
+            </h2>
+            
+            <div
+              id="neptune-visual"
+              class="w-[400px] h-[400px] rounded-full relative bg-cover bg-center cursor-pointer transition-all duration-1000"
+              style="
+                background-image: url('./images/neptune.png'); 
+                background-size: cover; 
+                background-position: center; 
+                border: none; 
+                outline: none;
+              "
+              onclick="showNeptuneInfo()"
+            >
+              <!-- Neptune Deep Ocean Glow -->
+              <div class="absolute inset-0 rounded-full bg-gradient-radial from-transparent via-blue-500/20 to-indigo-800/30 animate-pulse"></div>
+              
+              <!-- Storm Effects -->
+              <div class="absolute top-1/4 right-1/4 w-8 h-8 rounded-full bg-blue-300/40 blur-sm animate-pulse"></div>
+              <div class="absolute bottom-1/3 left-1/3 w-6 h-6 rounded-full bg-indigo-400/30 blur-sm animate-pulse" style="animation-delay: 1.5s;"></div>
+              <div class="absolute top-1/2 left-1/4 w-4 h-4 rounded-full bg-blue-400/50 blur-sm animate-pulse" style="animation-delay: 3s;"></div>
+            </div>
+          </div>
+
+          <!-- 📋 Planet Info - Initially Hidden -->
+          <div
+            id="neptune-info"
+            class="absolute right-0 top-1/2 transform translate-y-[-50%] opacity-0 transition-all duration-1000 ease-in-out bg-gray-900/70 backdrop-blur-md rounded-xl p-8 w-[500px] border border-gray-700 shadow-2xl text-right z-10"
+            style="transform: translate(100%, -50%);"
+          >
+            <!-- Time Light -->
+            <div
+              class="bg-blue-900/50 text-blue-300 text-xs font-semibold px-3 py-1 rounded-full inline-block mb-6"
+            >
+              الزمن الضوئي: ٤.٢ ساعة
+            </div>
+
+            <h3 class="text-3xl font-bold text-white mb-6">
+              كوكب نبتون - عملاق المحيطات
+            </h3>
+
+            <!-- Statistics Grid -->
+            <div class="grid grid-cols-2 gap-4 mb-6 text-sm">
+              <div class="bg-gray-800/50 p-3 rounded-lg">
+                <div class="text-gray-400">البُعد عن الشمس</div>
+                <div class="text-white font-semibold">٤.٥ مليار كم</div>
+              </div>
+              <div class="bg-gray-800/50 p-3 rounded-lg">
+                <div class="text-gray-400">القطر</div>
+                <div class="text-white font-semibold">٤٩٥٢٨ كم</div>
+              </div>
+              <div class="bg-gray-800/50 p-3 rounded-lg">
+                <div class="text-gray-400">اليوم</div>
+                <div class="text-white font-semibold">١٦.١ ساعة</div>
+              </div>
+              <div class="bg-gray-800/50 p-3 rounded-lg">
+                <div class="text-gray-400">السنة</div>
+                <div class="text-white font-semibold">١٦٥ سنة أرضية</div>
+              </div>
+            </div>
+
+            <!-- Highlighted Fact Button -->
+            <button
+              class="w-full bg-blue-700/50 text-blue-300 font-semibold py-3 px-6 rounded-lg mb-4 hover:bg-blue-600/70 transition">
+              حقيقة علمية: أقوى رياح في النظام الشمسي تصل ٢١٠٠ كم/س
+            </button>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col gap-4">
+              <button
+                data-planet="neptune"
+                class="quiz-btn w-full border border-blue-500 text-blue-500 font-semibold py-3 px-6 rounded-lg hover:bg-blue-500 hover:text-black transition"
+              >
+                اختبر معلوماتك
+              </button>
+              <button
+                onclick="continueFromNeptune()"
+                class="w-full gradient-btn text-white font-semibold py-3 px-6 rounded-lg transition"
+              >
+                اكمل رحلتك عبر الزمن
+              </button>
+            </div>
+          </div>
+
+        </div>
+        <!-- Spacer for separation -->
+        <div class="h-40"></div>
       </section>
     </div>
 
@@ -518,8 +1161,7 @@
       </p>
 
       <button
-        class="gradient-btn text-white font-semibold py-2 px-7 rounded-md text-lg hover:opacity-90 transition"
-      >
+        class="gradient-btn text-white font-semibold py-2 px-7 rounded-md text-lg hover:opacity-90 transition">
         ابدأ رحلة جديدة!
       </button>
     </section>
@@ -677,7 +1319,7 @@
         venus: {
           name: "الزهرة",
           englishName: "Venus",
-          lightTime: "٥ دقيقة",
+          lightTime: "٥ دقائق",
           mainFact: "أسخن كوكب في النظام الشمسي",
           diameter: "١٢,١٠٤ كم",
           distance: "١٠٨.٢ مليون كم",
@@ -686,33 +1328,33 @@
           fact: "يدور في الاتجاه المعاكس",
           color: "bg-yellow-500",
           shadow: "rgba(255,200,150,0.3)",
-          quizQuestion: "لماذا نُسمّي الزهرة بـ 'توأم الأرض'؟",
+          quizQuestion: "لماذا تُسمّى الزهرة بـ 'توأم الأرض'؟",
           quizOptions: [
             "أ. بسبب تشابه الحجم والكتلة",
-            "ب. لأنه أقرب كوكب للأرض",
-            "ج. لأنه يظهر في السماء كنجم ساطع",
-            "د. لأنه يحتوي على غلاف جوي مشابه",
+            "ب. لأنها أقرب كوكب للأرض",
+            "ج. لأنها تظهر في السماء كنجم ساطع",
+            "د. لأنها تحتوي على غلاف جوي مشابه",
           ],
           correctAnswer: 0,
         },
-        saturn: {
-          name: "زحل",
-          englishName: "Saturn",
-          lightTime: "٨٠ دقيقة",
-          mainFact: "الكوكب ذو الحلقات الرائعة",
-          diameter: "١١٦,٤٦٠ كم",
-          distance: "١.٤ مليار كم",
-          day: "١٠.٧ ساعة",
-          year: "٢٩.٥ سنة أرضية",
-          fact: "كثافته أقل من كثافة الماء",
-          color: "bg-yellow-200",
-          shadow: "rgba(255,255,200,0.3)",
-          quizQuestion: "مم تتكون حلقات زحل؟",
+        earth: {
+          name: "الأرض",
+          englishName: "Earth",
+          lightTime: "٨ دقائق",
+          mainFact: "الكوكب الوحيد المعروف بوجود الحياة",
+          diameter: "١٢,٧٤٢ كم",
+          distance: "١٤٩.٦ مليون كم",
+          day: "٢٤ ساعة",
+          year: "٣٦٥.٢٥ يوم",
+          fact: "٧١٪ من سطحها محيطات",
+          color: "bg-blue-500",
+          shadow: "rgba(59,130,246,0.3)",
+          quizQuestion: "ما نسبة المياه على سطح الأرض؟",
           quizOptions: [
-            "أ. من قطع الجليد والصخور",
-            "ب. من الغاز الساخن",
-            "ج. من الغبار الكوني",
-            "د. من البلورات الثلجية النقية",
+            "أ. ٧١٪",
+            "ب. ٦٥٪",
+            "ج. ٨٠٪",
+            "د. ٥٥٪",
           ],
           correctAnswer: 0,
         },
@@ -727,13 +1369,97 @@
           year: "٦٨٧ يوم أرضي",
           fact: "يحتوي على أعلى جبل في النظام الشمسي",
           color: "bg-red-500",
-          shadow: "rgba(255,100,100,0.3)",
-          quizQuestion: "لماذا نُسمّي المريخ بالكوكب الأحمر؟",
+          shadow: "rgba(239,68,68,0.3)",
+          quizQuestion: "لماذا يُسمّى المريخ بالكوكب الأحمر؟",
           quizOptions: [
             "أ. بسبب أكسيد الحديد (الصدأ)",
-            "ب. لسبب درجة الحرارة العالية",
-            "ج. لسبب الغلاف الجوي",
+            "ب. بسبب درجة الحرارة العالية",
+            "ج. بسبب الغلاف الجوي",
             "د. بسبب البراكين",
+          ],
+          correctAnswer: 0,
+        },
+        jupiter: {
+          name: "المشتري",
+          englishName: "Jupiter",
+          lightTime: "٤٣ دقيقة",
+          mainFact: "أكبر كوكب في النظام الشمسي",
+          diameter: "١٣٩,٨٢٠ كم",
+          distance: "٧٧٨.٥ مليون كم",
+          day: "٩.٩ ساعة",
+          year: "١١.٩ سنة أرضية",
+          fact: "له أكثر من ٧٩ قمراً",
+          color: "bg-orange-500",
+          shadow: "rgba(249,115,22,0.3)",
+          quizQuestion: "ما اسم أكبر قمر للمشتري؟",
+          quizOptions: [
+            "أ. غانيميد",
+            "ب. يوروبا",
+            "ج. إيو",
+            "د. كاليستو",
+          ],
+          correctAnswer: 0,
+        },
+        saturn: {
+          name: "زحل",
+          englishName: "Saturn",
+          lightTime: "٧٩ دقيقة",
+          mainFact: "سيد الحلقات",
+          diameter: "١١٦,٤٦٠ كم",
+          distance: "١.٤ مليار كم",
+          day: "١٠.٧ ساعة",
+          year: "٢٩.٥ سنة أرضية",
+          fact: "له أكثر من ٨٢ قمراً وحلقات رائعة",
+          color: "bg-yellow-500",
+          shadow: "rgba(234,179,8,0.3)",
+          quizQuestion: "ما الذي يجعل زحل مميزاً عن باقي الكواكب؟",
+          quizOptions: [
+            "أ. حلقاته الرائعة المرئية",
+            "ب. لونه الأزرق",
+            "ج. صغر حجمه",
+            "د. قربه من الشمس",
+          ],
+          correctAnswer: 0,
+        },
+        uranus: {
+          name: "أورانوس",
+          englishName: "Uranus",
+          lightTime: "٢.٧ ساعة",
+          mainFact: "الكوكب الجليدي",
+          diameter: "٥١,١١٨ كم",
+          distance: "٢.٩ مليار كم",
+          day: "١٧.٢ ساعة",
+          year: "٨٤ سنة أرضية",
+          fact: "يدور على جانبه ويحتوي على جليد مائي",
+          color: "bg-cyan-500",
+          shadow: "rgba(34,197,94,0.3)",
+          quizQuestion: "ما الذي يميز كوكب أورانوس عن باقي الكواكب؟",
+          quizOptions: [
+            "أ. يدور على جانبه",
+            "ب. له حلقات ذهبية",
+            "ج. الأقرب للشمس",
+            "د. لونه أحمر",
+          ],
+          correctAnswer: 0,
+        },
+        neptune: {
+          name: "نبتون",
+          englishName: "Neptune",
+          lightTime: "٤.٢ ساعة",
+          mainFact: "عملاق المحيطات",
+          diameter: "٤٩,٥٢٨ كم",
+          distance: "٤.٥ مليار كم",
+          day: "١٦.١ ساعة",
+          year: "١٦٥ سنة أرضية",
+          fact: "أقوى رياح في النظام الشمسي تصل ٢١٠٠ كم/س",
+          color: "bg-blue-500",
+          shadow: "rgba(59,130,246,0.3)",
+          quizQuestion: "ما الذي يميز كوكب نبتون؟",
+          quizOptions: [
+            "أ. أقوى رياح في النظام الشمسي",
+            "ب. الأقرب للشمس",
+            "ج. له حلقات ذهبية",
+            "د. صغر حجمه",
           ],
           correctAnswer: 0,
         },
@@ -786,11 +1512,28 @@
 
       // بدء الرحلة
       function startJourney() {
+        console.log('Starting journey - going to Mercury first');
         document.querySelector("main").classList.add("hidden-section");
         document
           .getElementById("planets-container")
           .classList.remove("hidden-section");
-        scrollToPlanet("venus-section");
+        
+        // التأكد من إعادة تعيين كل الكواكب للحالة الأصلية
+        setTimeout(() => {
+          resetMercuryToCenter();
+          resetVenusToCenter();
+          resetEarthToCenter();
+          resetMarsToCenter();
+          resetJupiterToCenter();
+          resetSaturnToCenter();
+          resetUranusToCenter();
+          resetNeptuneToCenter();
+        }, 100);
+        
+        // الذهاب لعطارد أولاً
+        setTimeout(() => {
+          scrollToPlanet("mercury-section");
+        }, 300);
       }
 
       // التمرير إلى كوكب معين
@@ -918,6 +1661,682 @@
         });
       }
 
+      // وظيفة إظهار معلومات كوكب عطارد
+      function showMercuryInfo() {
+        const mercuryContainer = document.getElementById('mercury-container');
+        const mercuryVisual = document.getElementById('mercury-visual');
+        const mercuryInfo = document.getElementById('mercury-info');
+        const mercuryTitle = document.getElementById('mercury-title');
+        
+        // إخفاء اسم الكوكب
+        mercuryTitle.style.opacity = '0';
+        
+        // تحريك الكوكب لليسار وتصغيره
+        setTimeout(() => {
+          mercuryContainer.style.left = '20%';
+          mercuryContainer.style.transform = 'translate(-50%, -50%)';
+          mercuryVisual.style.width = '300px';
+          mercuryVisual.style.height = '300px';
+        }, 300);
+        
+        // إظهار البطاقة من اليمين
+        setTimeout(() => {
+          mercuryInfo.style.transform = 'translate(0%, -50%)';
+          mercuryInfo.style.opacity = '1';
+        }, 800);
+      }
+
+      // وظيفة منفصلة للانتقال من عطارد للزهرة
+      function continueFromMercury() {
+        console.log('Continue from Mercury button clicked');
+        const mercuryContainer = document.getElementById('mercury-container');
+        const mercuryVisual = document.getElementById('mercury-visual');
+        const mercuryInfo = document.getElementById('mercury-info');
+        const mercuryTitle = document.getElementById('mercury-title');
+        
+        // إخفاء البطاقة أولاً
+        mercuryInfo.style.transition = 'all 0.5s ease-in-out';
+        mercuryInfo.style.transform = 'translate(100%, -50%)';
+        mercuryInfo.style.opacity = '0';
+        
+        // إرجاع الكوكب للوسط
+        setTimeout(() => {
+          mercuryContainer.style.transition = 'all 1s ease-in-out';
+          mercuryContainer.style.left = '50%';
+          mercuryContainer.style.top = '50%';
+          mercuryContainer.style.transform = 'translate(-50%, -50%)';
+          
+          mercuryVisual.style.transition = 'all 1s ease-in-out';
+          mercuryVisual.style.width = '400px';
+          mercuryVisual.style.height = '400px';
+          
+          // إظهار اسم الكوكب
+          mercuryTitle.style.opacity = '1';
+        }, 200);
+        
+        // الانتقال للزهرة
+        setTimeout(() => {
+          scrollToPlanet('venus-section');
+        }, 1500);
+      }
+
+      // وظيفة إعادة تعيين كوكب عطارد للحالة الأصلية
+      function resetMercuryToCenter() {
+        const mercuryContainer = document.getElementById('mercury-container');
+        const mercuryVisual = document.getElementById('mercury-visual');
+        const mercuryInfo = document.getElementById('mercury-info');
+        const mercuryTitle = document.getElementById('mercury-title');
+        
+        // إخفاء البطاقة تماماً
+        mercuryInfo.style.transform = 'translate(100%, -50%)';
+        mercuryInfo.style.opacity = '0';
+        
+        // إرجاع الكوكب للوسط
+        mercuryContainer.style.left = '50%';
+        mercuryContainer.style.top = '50%';
+        mercuryContainer.style.transform = 'translate(-50%, -50%)';
+        
+        // إرجاع حجم الكوكب للأصلي
+        mercuryVisual.style.width = '400px';
+        mercuryVisual.style.height = '400px';
+        
+        // إظهار اسم الكوكب
+        mercuryTitle.style.opacity = '1';
+      }
+
+      // وظيفة إظهار معلومات كوكب الزهرة
+      function showVenusInfo() {
+        const venusContainer = document.getElementById('venus-container');
+        const venusVisual = document.getElementById('venus-visual');
+        const venusInfo = document.getElementById('venus-info');
+        const venusTitle = document.getElementById('venus-title');
+        
+        // إخفاء اسم الكوكب
+        venusTitle.style.opacity = '0';
+        
+        // تحريك الكوكب لليسار وتصغيره
+        setTimeout(() => {
+          venusContainer.style.left = '20%';
+          venusContainer.style.transform = 'translate(-50%, -50%)';
+          venusVisual.style.width = '300px';
+          venusVisual.style.height = '300px';
+        }, 300);
+        
+        // إظهار البطاقة من اليمين
+        setTimeout(() => {
+          venusInfo.style.transform = 'translate(0%, -50%)';
+          venusInfo.style.opacity = '1';
+        }, 800);
+      }
+
+      // وظيفة الانتقال من الزهرة للأرض
+      function continueFromVenus() {
+        console.log('Continue from Venus button clicked');
+        const venusContainer = document.getElementById('venus-container');
+        const venusVisual = document.getElementById('venus-visual');
+        const venusInfo = document.getElementById('venus-info');
+        const venusTitle = document.getElementById('venus-title');
+        
+        // إخفاء البطاقة أولاً
+        venusInfo.style.transition = 'all 0.5s ease-in-out';
+        venusInfo.style.transform = 'translate(100%, -50%)';
+        venusInfo.style.opacity = '0';
+        
+        // إرجاع الكوكب للوسط
+        setTimeout(() => {
+          venusContainer.style.transition = 'all 1s ease-in-out';
+          venusContainer.style.left = '50%';
+          venusContainer.style.top = '50%';
+          venusContainer.style.transform = 'translate(-50%, -50%)';
+          
+          venusVisual.style.transition = 'all 1s ease-in-out';
+          venusVisual.style.width = '400px';
+          venusVisual.style.height = '400px';
+          
+          // إظهار اسم الكوكب
+          venusTitle.style.opacity = '1';
+        }, 200);
+        
+        // الانتقال للأرض
+        setTimeout(() => {
+          scrollToPlanet('earth-section');
+        }, 1500);
+      }
+
+      // وظيفة إعادة تعيين كوكب الزهرة للحالة الأصلية
+      function resetVenusToCenter() {
+        const venusContainer = document.getElementById('venus-container');
+        const venusVisual = document.getElementById('venus-visual');
+        const venusInfo = document.getElementById('venus-info');
+        const venusTitle = document.getElementById('venus-title');
+        
+        // إخفاء البطاقة تماماً
+        venusInfo.style.transform = 'translate(100%, -50%)';
+        venusInfo.style.opacity = '0';
+        
+        // إرجاع الكوكب للوسط
+        venusContainer.style.left = '50%';
+        venusContainer.style.top = '50%';
+        venusContainer.style.transform = 'translate(-50%, -50%)';
+        
+        // إرجاع حجم الكوكب للأصلي
+        venusVisual.style.width = '400px';
+        venusVisual.style.height = '400px';
+        
+        // إظهار اسم الكوكب
+        venusTitle.style.opacity = '1';
+      }
+
+      // وظيفة إظهار معلومات كوكب الأرض
+      function showEarthInfo() {
+        const earthContainer = document.getElementById('earth-container');
+        const earthVisual = document.getElementById('earth-visual');
+        const earthInfo = document.getElementById('earth-info');
+        const earthTitle = document.getElementById('earth-title');
+        
+        // إخفاء اسم الكوكب
+        earthTitle.style.opacity = '0';
+        
+        // تحريك الكوكب لليسار وتصغيره
+        setTimeout(() => {
+          earthContainer.style.left = '20%';
+          earthContainer.style.transform = 'translate(-50%, -50%)';
+          earthVisual.style.width = '300px';
+          earthVisual.style.height = '300px';
+        }, 300);
+        
+        // إظهار البطاقة من اليمين
+        setTimeout(() => {
+          earthInfo.style.transform = 'translate(0%, -50%)';
+          earthInfo.style.opacity = '1';
+        }, 800);
+      }
+
+      // وظيفة الانتقال من الأرض للمريخ
+      function continueFromEarth() {
+        console.log('Continue from Earth button clicked');
+        const earthContainer = document.getElementById('earth-container');
+        const earthVisual = document.getElementById('earth-visual');
+        const earthInfo = document.getElementById('earth-info');
+        const earthTitle = document.getElementById('earth-title');
+        
+        // إخفاء البطاقة أولاً
+        earthInfo.style.transition = 'all 0.5s ease-in-out';
+        earthInfo.style.transform = 'translate(100%, -50%)';
+        earthInfo.style.opacity = '0';
+        
+        // إرجاع الكوكب للوسط
+        setTimeout(() => {
+          earthContainer.style.transition = 'all 1s ease-in-out';
+          earthContainer.style.left = '50%';
+          earthContainer.style.top = '50%';
+          earthContainer.style.transform = 'translate(-50%, -50%)';
+          
+          earthVisual.style.transition = 'all 1s ease-in-out';
+          earthVisual.style.width = '400px';
+          earthVisual.style.height = '400px';
+          
+          // إظهار اسم الكوكب
+          earthTitle.style.opacity = '1';
+        }, 200);
+        
+        // الانتقال للمريخ
+        setTimeout(() => {
+          scrollToPlanet('mars-section');
+        }, 1500);
+      }
+
+      // وظيفة إعادة تعيين كوكب الأرض للحالة الأصلية
+      function resetEarthToCenter() {
+        const earthContainer = document.getElementById('earth-container');
+        const earthVisual = document.getElementById('earth-visual');
+        const earthInfo = document.getElementById('earth-info');
+        const earthTitle = document.getElementById('earth-title');
+        
+        // إخفاء البطاقة تماماً
+        earthInfo.style.transform = 'translate(100%, -50%)';
+        earthInfo.style.opacity = '0';
+        
+        // إرجاع الكوكب للوسط
+        earthContainer.style.left = '50%';
+        earthContainer.style.top = '50%';
+        earthContainer.style.transform = 'translate(-50%, -50%)';
+        
+        // إرجاع حجم الكوكب للأصلي
+        earthVisual.style.width = '400px';
+        earthVisual.style.height = '400px';
+        
+        // إظهار اسم الكوكب
+        earthTitle.style.opacity = '1';
+      }
+
+      // وظيفة إظهار معلومات كوكب المريخ
+      function showMarsInfo() {
+        const marsContainer = document.getElementById('mars-container');
+        const marsVisual = document.getElementById('mars-visual');
+        const marsInfo = document.getElementById('mars-info');
+        const marsTitle = document.getElementById('mars-title');
+        
+        // إخفاء اسم الكوكب
+        marsTitle.style.opacity = '0';
+        
+        // تحريك الكوكب لليسار وتصغيره
+        setTimeout(() => {
+          marsContainer.style.left = '20%';
+          marsContainer.style.transform = 'translate(-50%, -50%)';
+          marsVisual.style.width = '300px';
+          marsVisual.style.height = '300px';
+        }, 300);
+        
+        // إظهار البطاقة من اليمين
+        setTimeout(() => {
+          marsInfo.style.transform = 'translate(0%, -50%)';
+          marsInfo.style.opacity = '1';
+        }, 800);
+      }
+
+      // وظيفة الانتقال من المريخ للمشتري
+      function continueFromMars() {
+        console.log('Continue from Mars button clicked');
+        const marsContainer = document.getElementById('mars-container');
+        const marsVisual = document.getElementById('mars-visual');
+        const marsInfo = document.getElementById('mars-info');
+        const marsTitle = document.getElementById('mars-title');
+        
+        // إخفاء البطاقة أولاً
+        marsInfo.style.transition = 'all 0.5s ease-in-out';
+        marsInfo.style.transform = 'translate(100%, -50%)';
+        marsInfo.style.opacity = '0';
+        
+        // إرجاع الكوكب للوسط
+        setTimeout(() => {
+          marsContainer.style.transition = 'all 1s ease-in-out';
+          marsContainer.style.left = '50%';
+          marsContainer.style.top = '50%';
+          marsContainer.style.transform = 'translate(-50%, -50%)';
+          
+          marsVisual.style.transition = 'all 1s ease-in-out';
+          marsVisual.style.width = '400px';
+          marsVisual.style.height = '400px';
+          
+          // إظهار اسم الكوكب
+          marsTitle.style.opacity = '1';
+        }, 200);
+        
+        // الانتقال للمشتري
+        setTimeout(() => {
+          scrollToPlanet('jupiter-section');
+        }, 1500);
+      }
+
+      // وظيفة إعادة تعيين كوكب المريخ للحالة الأصلية
+      function resetMarsToCenter() {
+        const marsContainer = document.getElementById('mars-container');
+        const marsVisual = document.getElementById('mars-visual');
+        const marsInfo = document.getElementById('mars-info');
+        const marsTitle = document.getElementById('mars-title');
+        
+        // إخفاء البطاقة تماماً
+        marsInfo.style.transform = 'translate(100%, -50%)';
+        marsInfo.style.opacity = '0';
+        
+        // إرجاع الكوكب للوسط
+        marsContainer.style.left = '50%';
+        marsContainer.style.top = '50%';
+        marsContainer.style.transform = 'translate(-50%, -50%)';
+        
+        // إرجاع حجم الكوكب للأصلي
+        marsVisual.style.width = '400px';
+        marsVisual.style.height = '400px';
+        
+        // إظهار اسم الكوكب
+        marsTitle.style.opacity = '1';
+      }
+
+      // وظيفة إظهار معلومات كوكب المشتري
+      function showJupiterInfo() {
+        const jupiterContainer = document.getElementById('jupiter-container');
+        const jupiterVisual = document.getElementById('jupiter-visual');
+        const jupiterInfo = document.getElementById('jupiter-info');
+        const jupiterTitle = document.getElementById('jupiter-title');
+        
+        // إخفاء اسم الكوكب
+        jupiterTitle.style.opacity = '0';
+        
+        // تحريك الكوكب لليسار وتصغيره
+        setTimeout(() => {
+          jupiterContainer.style.left = '20%';
+          jupiterContainer.style.transform = 'translate(-50%, -50%)';
+          jupiterVisual.style.width = '300px';
+          jupiterVisual.style.height = '300px';
+        }, 300);
+        
+        // إظهار البطاقة من اليمين
+        setTimeout(() => {
+          jupiterInfo.style.transform = 'translate(0%, -50%)';
+          jupiterInfo.style.opacity = '1';
+        }, 800);
+      }
+
+      // وظيفة الانتقال من المشتري للنهاية
+      function continueFromJupiter() {
+        console.log('Continue from Jupiter button clicked');
+        const jupiterContainer = document.getElementById('jupiter-container');
+        const jupiterVisual = document.getElementById('jupiter-visual');
+        const jupiterInfo = document.getElementById('jupiter-info');
+        const jupiterTitle = document.getElementById('jupiter-title');
+        
+        // إخفاء البطاقة أولاً
+        jupiterInfo.style.transition = 'all 0.5s ease-in-out';
+        jupiterInfo.style.transform = 'translate(100%, -50%)';
+        jupiterInfo.style.opacity = '0';
+        
+        // إرجاع الكوكب للوسط
+        setTimeout(() => {
+          jupiterContainer.style.transition = 'all 1s ease-in-out';
+          jupiterContainer.style.left = '50%';
+          jupiterContainer.style.top = '50%';
+          jupiterContainer.style.transform = 'translate(-50%, -50%)';
+          
+          jupiterVisual.style.transition = 'all 1s ease-in-out';
+          jupiterVisual.style.width = '400px';
+          jupiterVisual.style.height = '400px';
+          
+          // إظهار اسم الكوكب
+          jupiterTitle.style.opacity = '1';
+        }, 200);
+        
+        // الانتقال لكوكب زحل
+        setTimeout(() => {
+          const saturnSection = document.getElementById('saturn-section');
+          saturnSection.scrollIntoView({ 
+            behavior: 'smooth' 
+          });
+        }, 1500);
+      }
+
+      // وظيفة إعادة تعيين كوكب المشتري للحالة الأصلية
+      function resetJupiterToCenter() {
+        const jupiterContainer = document.getElementById('jupiter-container');
+        const jupiterVisual = document.getElementById('jupiter-visual');
+        const jupiterInfo = document.getElementById('jupiter-info');
+        const jupiterTitle = document.getElementById('jupiter-title');
+        
+        // إخفاء البطاقة تماماً
+        jupiterInfo.style.transform = 'translate(100%, -50%)';
+        jupiterInfo.style.opacity = '0';
+        
+        // إرجاع الكوكب للوسط
+        jupiterContainer.style.left = '50%';
+        jupiterContainer.style.top = '50%';
+        jupiterContainer.style.transform = 'translate(-50%, -50%)';
+        
+        // إرجاع حجم الكوكب للأصلي
+        jupiterVisual.style.width = '400px';
+        jupiterVisual.style.height = '400px';
+        
+        // إظهار اسم الكوكب
+        jupiterTitle.style.opacity = '1';
+      }
+
+      // ======================
+      // وظائف كوكب زحل
+      // ======================
+      
+      function showSaturnInfo() {
+        const saturnContainer = document.getElementById('saturn-container');
+        const saturnVisual = document.getElementById('saturn-visual');
+        const saturnInfo = document.getElementById('saturn-info');
+        const saturnTitle = document.getElementById('saturn-title');
+        
+        // إخفاء اسم الكوكب
+        saturnTitle.style.opacity = '0';
+        
+        // تحريك الكوكب لليسار وتصغيره
+        setTimeout(() => {
+          saturnContainer.style.left = '20%';
+          saturnContainer.style.transform = 'translate(-50%, -50%)';
+          saturnVisual.style.width = '380px';
+          saturnVisual.style.height = '280px';
+        }, 300);
+        
+        // إظهار البطاقة من اليمين
+        setTimeout(() => {
+          saturnInfo.style.transform = 'translate(0%, -50%)';
+          saturnInfo.style.opacity = '1';
+        }, 800);
+      }
+
+      // وظيفة الانتقال من زحل للنهاية
+      function continueFromSaturn() {
+        console.log('Continue from Saturn button clicked');
+        const saturnContainer = document.getElementById('saturn-container');
+        const saturnVisual = document.getElementById('saturn-visual');
+        const saturnInfo = document.getElementById('saturn-info');
+        const saturnTitle = document.getElementById('saturn-title');
+        
+        // إخفاء البطاقة أولاً
+        saturnInfo.style.transition = 'all 0.5s ease-in-out';
+        saturnInfo.style.transform = 'translate(100%, -50%)';
+        saturnInfo.style.opacity = '0';
+        
+        // إرجاع الكوكب للوسط
+        setTimeout(() => {
+          saturnContainer.style.transition = 'all 1s ease-in-out';
+          saturnContainer.style.left = '50%';
+          saturnContainer.style.top = '50%';
+          saturnContainer.style.transform = 'translate(-50%, -50%)';
+          
+          saturnVisual.style.transition = 'all 1s ease-in-out';
+          saturnVisual.style.width = '500px';
+          saturnVisual.style.height = '400px';
+          
+          // إظهار اسم الكوكب
+          saturnTitle.style.opacity = '1';
+        }, 200);
+        
+        // الانتقال لأورانوس
+        setTimeout(() => {
+          scrollToPlanet('uranus-section');
+        }, 1500);
+      }
+
+      // وظيفة إعادة تعيين كوكب زحل للحالة الأصلية
+      function resetSaturnToCenter() {
+        const saturnContainer = document.getElementById('saturn-container');
+        const saturnVisual = document.getElementById('saturn-visual');
+        const saturnInfo = document.getElementById('saturn-info');
+        const saturnTitle = document.getElementById('saturn-title');
+        
+        // إخفاء البطاقة تماماً
+        saturnInfo.style.transform = 'translate(100%, -50%)';
+        saturnInfo.style.opacity = '0';
+        
+        // إرجاع الكوكب للوسط
+        saturnContainer.style.left = '50%';
+        saturnContainer.style.top = '50%';
+        saturnContainer.style.transform = 'translate(-50%, -50%)';
+        
+        // إرجاع حجم الكوكب للأصلي
+        saturnVisual.style.width = '500px';
+        saturnVisual.style.height = '400px';
+        
+        // إظهار اسم الكوكب
+        saturnTitle.style.opacity = '1';
+      }
+
+      // ======================
+      // وظائف كوكب أورانوس
+      // ======================
+      
+      function showUranusInfo() {
+        const uranusContainer = document.getElementById('uranus-container');
+        const uranusVisual = document.getElementById('uranus-visual');
+        const uranusInfo = document.getElementById('uranus-info');
+        const uranusTitle = document.getElementById('uranus-title');
+        
+        // إخفاء اسم الكوكب
+        uranusTitle.style.opacity = '0';
+        
+        // تحريك الكوكب لليسار وتصغيره
+        setTimeout(() => {
+          uranusContainer.style.left = '20%';
+          uranusContainer.style.transform = 'translate(-50%, -50%)';
+          uranusVisual.style.width = '380px';
+          uranusVisual.style.height = '380px';
+        }, 300);
+        
+        // إظهار البطاقة من اليمين
+        setTimeout(() => {
+          uranusInfo.style.transform = 'translate(0%, -50%)';
+          uranusInfo.style.opacity = '1';
+        }, 800);
+      }
+
+      // وظيفة الانتقال من أورانوس للنهاية
+      function continueFromUranus() {
+        console.log('Continue from Uranus button clicked');
+        const uranusContainer = document.getElementById('uranus-container');
+        const uranusVisual = document.getElementById('uranus-visual');
+        const uranusInfo = document.getElementById('uranus-info');
+        const uranusTitle = document.getElementById('uranus-title');
+        
+        // إخفاء البطاقة أولاً
+        uranusInfo.style.transition = 'all 0.5s ease-in-out';
+        uranusInfo.style.transform = 'translate(100%, -50%)';
+        uranusInfo.style.opacity = '0';
+        
+        // إرجاع الكوكب للوسط
+        setTimeout(() => {
+          uranusContainer.style.transition = 'all 1s ease-in-out';
+          uranusContainer.style.left = '50%';
+          uranusContainer.style.top = '50%';
+          uranusContainer.style.transform = 'translate(-50%, -50%)';
+          
+          uranusVisual.style.transition = 'all 1s ease-in-out';
+          uranusVisual.style.width = '500px';
+          uranusVisual.style.height = '500px';
+          
+          // إظهار اسم الكوكب
+          uranusTitle.style.opacity = '1';
+        }, 200);
+        
+        // الانتقال لنبتون
+        setTimeout(() => {
+          scrollToPlanet('neptune-section');
+        }, 1500);
+      }
+
+      // وظيفة إعادة تعيين كوكب أورانوس للحالة الأصلية
+      function resetUranusToCenter() {
+        const uranusContainer = document.getElementById('uranus-container');
+        const uranusVisual = document.getElementById('uranus-visual');
+        const uranusInfo = document.getElementById('uranus-info');
+        const uranusTitle = document.getElementById('uranus-title');
+        
+        // إخفاء البطاقة تماماً
+        uranusInfo.style.transform = 'translate(100%, -50%)';
+        uranusInfo.style.opacity = '0';
+        
+        // إرجاع الكوكب للوسط
+        uranusContainer.style.left = '50%';
+        uranusContainer.style.top = '50%';
+        uranusContainer.style.transform = 'translate(-50%, -50%)';
+        
+        // إرجاع حجم الكوكب للأصلي
+        uranusVisual.style.width = '500px';
+        uranusVisual.style.height = '500px';
+        
+        // إظهار اسم الكوكب
+        uranusTitle.style.opacity = '1';
+      }
+
+      // ======================
+      // وظائف كوكب نبتون
+      // ======================
+      
+      function showNeptuneInfo() {
+        const neptuneContainer = document.getElementById('neptune-container');
+        const neptuneVisual = document.getElementById('neptune-visual');
+        const neptuneInfo = document.getElementById('neptune-info');
+        const neptuneTitle = document.getElementById('neptune-title');
+        
+        // إخفاء اسم الكوكب
+        neptuneTitle.style.opacity = '0';
+        
+        // تحريك الكوكب لليسار وتصغيره
+        setTimeout(() => {
+          neptuneContainer.style.left = '20%';
+          neptuneContainer.style.transform = 'translate(-50%, -50%)';
+          neptuneVisual.style.width = '300px';
+          neptuneVisual.style.height = '300px';
+        }, 300);
+        
+        // إظهار البطاقة من اليمين
+        setTimeout(() => {
+          neptuneInfo.style.transform = 'translate(0%, -50%)';
+          neptuneInfo.style.opacity = '1';
+        }, 800);
+      }
+
+      // وظيفة الانتقال من نبتون للنهاية
+      function continueFromNeptune() {
+        console.log('Continue from Neptune button clicked');
+        const neptuneContainer = document.getElementById('neptune-container');
+        const neptuneVisual = document.getElementById('neptune-visual');
+        const neptuneInfo = document.getElementById('neptune-info');
+        const neptuneTitle = document.getElementById('neptune-title');
+        
+        // إخفاء البطاقة أولاً
+        neptuneInfo.style.transition = 'all 0.5s ease-in-out';
+        neptuneInfo.style.transform = 'translate(100%, -50%)';
+        neptuneInfo.style.opacity = '0';
+        
+        // إرجاع الكوكب للوسط
+        setTimeout(() => {
+          neptuneContainer.style.transition = 'all 1s ease-in-out';
+          neptuneContainer.style.left = '50%';
+          neptuneContainer.style.top = '50%';
+          neptuneContainer.style.transform = 'translate(-50%, -50%)';
+          
+          neptuneVisual.style.transition = 'all 1s ease-in-out';
+          neptuneVisual.style.width = '400px';
+          neptuneVisual.style.height = '400px';
+          
+          // إظهار اسم الكوكب
+          neptuneTitle.style.opacity = '1';
+        }, 200);
+        
+        // انتهاء الرحلة النهائية
+        setTimeout(() => {
+          alert('مبروك! انتهيت من رحلة النظام الشمسي الكاملة! 🎉🌌🪐');
+        }, 1500);
+      }
+
+      // وظيفة إعادة تعيين كوكب نبتون للحالة الأصلية
+      function resetNeptuneToCenter() {
+        const neptuneContainer = document.getElementById('neptune-container');
+        const neptuneVisual = document.getElementById('neptune-visual');
+        const neptuneInfo = document.getElementById('neptune-info');
+        const neptuneTitle = document.getElementById('neptune-title');
+        
+        // إخفاء البطاقة تماماً
+        neptuneInfo.style.transform = 'translate(100%, -50%)';
+        neptuneInfo.style.opacity = '0';
+        
+        // إرجاع الكوكب للوسط
+        neptuneContainer.style.left = '50%';
+        neptuneContainer.style.top = '50%';
+        neptuneContainer.style.transform = 'translate(-50%, -50%)';
+        
+        // إرجاع حجم الكوكب للأصلي
+        neptuneVisual.style.width = '400px';
+        neptuneVisual.style.height = '400px';
+        
+        // إظهار اسم الكوكب
+        neptuneTitle.style.opacity = '1';
+      }
+
       // تحديث النقاط
       function updateScore() {
         scoreElement.textContent = score;
@@ -946,6 +2365,14 @@
         }
 
         updateLightTime(hours, minutes);
+        
+        // إعادة تعيين الكواكب عند تحميل الصفحة
+        setTimeout(() => {
+          resetMercuryToCenter();
+          resetVenusToCenter();
+          resetEarthToCenter();
+          resetMarsToCenter();
+        }, 500);
       })();
     </script>
   </body>
